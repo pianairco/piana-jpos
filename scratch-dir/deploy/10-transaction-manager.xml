@@ -1,0 +1,5 @@
+<transaction-manager name="my-tm" realm="my-tm" logger="Q2">
+    <property name="queue" value="my-tm-queue"/>
+
+    <participant class="ir.piana.dev.jpos.qp.core.participant.HttpParticipant" />
+</transaction-manager>
