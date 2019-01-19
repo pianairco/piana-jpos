@@ -1,26 +1,21 @@
 package ir.piana.dev.jpos.qp.modules.sample;
 
-import ir.piana.dev.jpos.qp.core.http.QPHttpHandler;
-import ir.piana.dev.jpos.qp.core.http.QPHttpHandlerBase;
-import ir.piana.dev.jpos.qp.core.http.QPHttpOperator;
-import ir.piana.dev.jpos.qp.core.http.QPHttpOperatorBase;
-import org.glassfish.grizzly.http.server.HttpHandler;
+import ir.piana.dev.jpos.qp.core.error.QPHttpResponseException;
+import ir.piana.dev.jpos.qp.core.http.HttpMediaType;
+import ir.piana.dev.jpos.qp.ext.http.module.QPHttpHandlerExt;
+import ir.piana.dev.jpos.qp.ext.http.module.QPHttpResponse;
+import ir.piana.dev.jpos.qp.ext.http.module.QPHttpResponseBuilder;
 import org.glassfish.grizzly.http.server.Request;
-import org.glassfish.grizzly.http.server.Response;
+import org.glassfish.grizzly.http.util.HttpStatus;
 
-import javax.management.*;
-import java.io.IOException;
-
-public class SampleHandler extends QPHttpOperatorBase {
+public class SampleHandler implements QPHttpHandlerExt {
     @Override
-    public void get(Request request, Response response) {
-        try {
-            response.getWriter().write(
-                    "GET: HelloToYou!");
-            response.getWriter().flush();
-            response.resume();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public QPHttpResponse get(Request request)
+            throws QPHttpResponseException {
+        return QPHttpResponseBuilder.status(HttpStatus.OK_200)
+                .entity(new SampleModel("ali", 13))
+                .mediaType(HttpMediaType.APPLICATION_JSON)
+                .charset(null)
+                .make();
     }
 }

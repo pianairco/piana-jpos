@@ -1,5 +1,5 @@
 <qbean name="http-request-multiplexor"
-       class="ir.piana.dev.jpos.qp.core.module.QPHttpRequestMultiplexorModule"
+       class="ir.piana.dev.jpos.qp.ext.http.module.QPHttpRequestMultiplexorExtModule"
        logger="Q2">
     <property name="qp-space" value="tspace:default" />
     <property name="qp-in" value="qp-http-request-multiplexor-module-in" />
@@ -7,5 +7,9 @@
     <qp-http-request>
         <qp-url>sample</qp-url>
         <qp-service>ir.piana.dev.jpos.qp.modules.sample.SampleHandler</qp-service>
+        <qp-role>
+            <default></default>
+            <get>user</get>
+        </qp-role>
     </qp-http-request>
 </qbean>

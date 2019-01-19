@@ -1,17 +1,20 @@
-package ir.piana.dev.jpos.qp.core.module;
+package ir.piana.dev.jpos.qp.ext.http.module;
 
+import com.google.gson.Gson;
 import ir.piana.dev.jpos.qp.core.error.QPException;
-import ir.piana.dev.jpos.qp.core.http.QPHttpOperator;
-import ir.piana.dev.jpos.qp.core.http.QPHttpHandler;
+import ir.piana.dev.jpos.qp.core.http.HttpMediaType;
+import ir.piana.dev.jpos.qp.core.module.QPBaseModule;
 import org.glassfish.grizzly.http.Method;
 import org.glassfish.grizzly.http.server.Request;
 import org.glassfish.grizzly.http.server.Response;
+import org.jdom2.Element;
 import org.jpos.q2.QBean;
 import org.jpos.space.SpaceListener;
 import org.jpos.transaction.Context;
 import org.jpos.util.LogEvent;
 import org.jpos.util.Logger;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -20,13 +23,14 @@ import java.util.concurrent.Executors;
 import static ir.piana.dev.jpos.qp.core.http.QPDefaultRequestHandlerType.INTERNAL_ERROR;
 import static ir.piana.dev.jpos.qp.core.http.QPDefaultRequestHandlerType.NOT_FOUND;
 
-public class QPHttpRequestMultiplexorModule
+public class QPHttpRequestMultiplexorExtModule
         extends QPBaseModule
         implements SpaceListener<String, Context> {
-    protected Map<String, QPHttpOperator> httpHandlerMap =
+    protected Map<String, QPHttpHandlerInfo> httpHandlerMap =
             new LinkedHashMap<>();
     protected ExecutorService listener;
     protected ExecutorService worker;
+    protected Gson gson = new Gson();
 
     @Override
     protected void configQPModule() throws Exception {
@@ -37,8 +41,21 @@ public class QPHttpRequestMultiplexorModule
                 if(!url.startsWith("/"))
                     url = "/".concat(url);
                 String service = httpRequest.getChildText("qp-service");
-                QPHttpOperator handler = (QPHttpOperator)getLoader().loadClass(service).newInstance();
-                httpHandlerMap.put(url, handler);
+                QPHttpHandlerExt handler = (QPHttpHandlerExt)getLoader()
+                        .loadClass(service).newInstance();
+                Element qpRoleElement = httpRequest.getChild("qp-role");
+                String defaultRoles = qpRoleElement.getChildText("default");
+                String getRoles = qpRoleElement.getChildText("get");
+                String postRoles = qpRoleElement.getChildText("post");
+                String putRoles = qpRoleElement.getChildText("put");
+                String deleteRoles = qpRoleElement.getChildText("delete");
+                String headRoles = qpRoleElement.getChildText("head");
+                String optionsRoles = qpRoleElement.getChildText("options");
+                String traceRoles = qpRoleElement.getChildText("trace");
+
+                QPHttpRole httpRole = new QPHttpRole(defaultRoles);
+
+                httpHandlerMap.put(url, new QPHttpHandlerInfo(url, handler, httpRole));
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -92,15 +109,12 @@ public class QPHttpRequestMultiplexorModule
         try {
             request = context.get("request");
             response = context.get("response");
-            QPHttpOperator qpHttpHandler = httpHandlerMap.get(request.getRequestURI());
-            if (qpHttpHandler == null)
+            QPHttpHandlerInfo handlerInfo = httpHandlerMap
+                    .get(request.getRequestURI());
+            if (handlerInfo == null || handlerInfo.getHttpHandlerExt() == null)
                 NOT_FOUND.handle(request, response);
             else {
-                if(qpHttpHandler instanceof QPHttpHandler) {
-                    invokeHttpOperator((QPHttpHandler) qpHttpHandler, request, response);
-                } else {
-                    qpHttpHandler.service(request, response);
-                }
+                invokeHttpOperator(handlerInfo.getHttpHandlerExt(), request, response);
             }
         } catch (Exception e) {
             try {
@@ -114,23 +128,57 @@ public class QPHttpRequestMultiplexorModule
     }
 
     protected void invokeHttpOperator(
-            QPHttpHandler qpHttpOperator,
+            QPHttpHandlerExt operatorExt,
             Request request, Response response)
             throws Exception {
         if(request.getMethod().equals(Method.POST)) {
-            qpHttpOperator.post(request, response);
+            makeResponse(response,
+                    operatorExt.post(request));
         } else if(request.getMethod().equals(Method.GET)) {
-            qpHttpOperator.get(request, response);
+            makeResponse(response,
+                    operatorExt.get(request));
         } else if(request.getMethod().equals(Method.PUT)) {
-            qpHttpOperator.put(request, response);
+            makeResponse(response,
+                    operatorExt.put(request));
         } else if(request.getMethod().equals(Method.DELETE)) {
-            qpHttpOperator.delete(request, response);
+            makeResponse(response,
+                    operatorExt.delete(request));
         } else if(request.getMethod().equals(Method.HEAD)) {
-            qpHttpOperator.head(request, response);
+            makeResponse(response,
+                    operatorExt.head(request));
         } else if(request.getMethod().equals(Method.OPTIONS)) {
-            qpHttpOperator.options(request, response);
+            makeResponse(response,
+                    operatorExt.options(request));
         } else if(request.getMethod().equals(Method.TRACE)) {
-            qpHttpOperator.trace(request, response);
+            makeResponse(response,
+                    operatorExt.trace(request));
+        }
+    }
+
+    protected final void makeResponse(
+            Response response,
+            QPHttpResponse qpHttpResponse) {
+        response.setStatus(qpHttpResponse.httpStatus.getStatusCode());
+
+        String entityString = null;
+        if(!(qpHttpResponse.entity instanceof String)) {
+            if (qpHttpResponse.mediaType == HttpMediaType.APPLICATION_JSON) {
+                entityString = gson.toJson(qpHttpResponse.entity);
+            }
+        } else {
+            entityString = (String)qpHttpResponse.entity;
+        }
+        response.setHeader("content-type",
+                qpHttpResponse.mediaType.getCode()
+                        .concat(";charset=")
+                        .concat(qpHttpResponse.charset));
+        try {
+            response.getWriter().write(
+                    entityString);
+            response.getWriter().flush();
+            response.resume();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

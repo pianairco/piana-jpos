@@ -1,6 +1,6 @@
 package ir.piana.dev.jpos.qp.core.module;
 
-import ir.piana.dev.jpos.qp.core.http.DefaultRequestHandlerType;
+import ir.piana.dev.jpos.qp.core.http.QPDefaultRequestHandlerType;
 import org.glassfish.grizzly.http.server.*;
 import org.jpos.transaction.Context;
 
@@ -32,17 +32,6 @@ public class QPHttpServerModule extends QPBaseModule {
                         Context context = new Context();
                         context.put("request", request);
                         context.put("response", response);
-
-                        new Thread(() -> {
-                            try {
-                                Thread.sleep(10000l);
-                                DefaultRequestHandlerType.INTERNAL_ERROR.handle(request, response);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        }).start();
                         out(context);
                     }
                 });

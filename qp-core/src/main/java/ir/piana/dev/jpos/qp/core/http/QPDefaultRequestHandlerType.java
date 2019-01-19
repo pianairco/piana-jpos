@@ -6,7 +6,8 @@ import org.glassfish.grizzly.http.server.Response;
 
 import java.io.IOException;
 
-public enum DefaultRequestHandlerType {
+public enum QPDefaultRequestHandlerType {
+    OK_REQUEST(200, null),
     BAD_REQUEST(400, new BadRequestHandler()),
     UNAUTHORIZED(401, new UnauthorizedHandler()),
     FORBIDDEN(403, new ForbiddenHandler()),
@@ -14,9 +15,9 @@ public enum DefaultRequestHandlerType {
     INTERNAL_ERROR(500, new InternalErrorHandler());
 
     private int code;
-    private QPHttpHandler httpHandler;
+    private QPHttpOperator httpHandler;
 
-    DefaultRequestHandlerType(int code, QPHttpHandler httpHandler) {
+    QPDefaultRequestHandlerType(int code, QPHttpOperator httpHandler) {
         this.code = code;
         this.httpHandler = httpHandler;
     }
@@ -29,9 +30,10 @@ public enum DefaultRequestHandlerType {
     }
 
     private static final class BadRequestHandler
-            extends HttpHandler implements QPHttpHandler {
+            extends HttpHandler implements QPHttpOperator {
         @Override
-        public void service(Request request, Response response) throws Exception {
+        public void service(Request request, Response response)
+                throws Exception {
             try {
                 response.setStatus(400);
                 response.getWriter().write(
@@ -45,7 +47,7 @@ public enum DefaultRequestHandlerType {
     }
 
     private static final class ForbiddenHandler
-            extends HttpHandler implements QPHttpHandler {
+            extends HttpHandler implements QPHttpOperator {
         @Override
         public void service(Request request, Response response) throws Exception {
             try {
@@ -61,7 +63,7 @@ public enum DefaultRequestHandlerType {
     }
 
     private static final class InternalErrorHandler
-            extends HttpHandler implements QPHttpHandler {
+            extends HttpHandler implements QPHttpOperator {
         @Override
         public void service(Request request, Response response) throws Exception {
             try {
@@ -77,7 +79,7 @@ public enum DefaultRequestHandlerType {
     }
 
     private static final class NotFoundHandler
-            extends HttpHandler implements QPHttpHandler {
+            extends HttpHandler implements QPHttpOperator {
         @Override
         public void service(Request request, Response response) throws Exception {
             try {
@@ -93,7 +95,7 @@ public enum DefaultRequestHandlerType {
     }
 
     private static final class UnauthorizedHandler
-            extends HttpHandler implements QPHttpHandler {
+            extends HttpHandler implements QPHttpOperator {
         @Override
         public void service(Request request, Response response) throws Exception {
             try {
