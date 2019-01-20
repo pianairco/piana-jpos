@@ -8,7 +8,7 @@
     <qp-role-management-type>in-memory</qp-role-management-type>
     <qp-user>
         <identity>user1</identity>
-        <roles>user,admin</roles>
+        <roles>user</roles>
     </qp-user>
 
     <qp-user>

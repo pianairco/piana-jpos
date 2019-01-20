@@ -26,6 +26,7 @@ import org.jpos.util.NameRegistrar;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -181,7 +182,7 @@ public class QPHttpRequestMultiplexorExtModule
                             .getRole(HttpMethodType.POST));
             if(b)
                 makeResponse(response,
-                    httpHandlerExt.post(request));
+                    httpHandlerExt.post(new QPHttpRequest(request)));
             else
                 QPDefaultRequestHandlerType.UNAUTHORIZED.handle(
                         request, response);
@@ -191,25 +192,25 @@ public class QPHttpRequestMultiplexorExtModule
                             .getRole(HttpMethodType.GET));
             if(b)
                 makeResponse(response,
-                        httpHandlerExt.get(request));
+                        httpHandlerExt.get(new QPHttpRequest(request)));
             else
                 QPDefaultRequestHandlerType.UNAUTHORIZED.handle(
                         request, response);
         } else if(request.getMethod().equals(Method.PUT)) {
             makeResponse(response,
-                    httpHandlerExt.put(request));
+                    httpHandlerExt.put(new QPHttpRequest(request)));
         } else if(request.getMethod().equals(Method.DELETE)) {
             makeResponse(response,
-                    httpHandlerExt.delete(request));
+                    httpHandlerExt.delete(new QPHttpRequest(request)));
         } else if(request.getMethod().equals(Method.HEAD)) {
             makeResponse(response,
-                    httpHandlerExt.head(request));
+                    httpHandlerExt.head(new QPHttpRequest(request)));
         } else if(request.getMethod().equals(Method.OPTIONS)) {
             makeResponse(response,
-                    httpHandlerExt.options(request));
+                    httpHandlerExt.options(new QPHttpRequest(request)));
         } else if(request.getMethod().equals(Method.TRACE)) {
             makeResponse(response,
-                    httpHandlerExt.trace(request));
+                    httpHandlerExt.trace(new QPHttpRequest(request)));
         }
     }
 

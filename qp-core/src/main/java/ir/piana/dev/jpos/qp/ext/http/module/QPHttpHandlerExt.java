@@ -5,43 +5,43 @@ import org.glassfish.grizzly.http.server.Request;
 import org.glassfish.grizzly.http.util.HttpStatus;
 
 public interface QPHttpHandlerExt {
-    default QPHttpResponse get(Request request)
+    default QPHttpResponse get(QPHttpRequest request)
             throws QPHttpResponseException {
         QPHttpResponseBuilder.status(HttpStatus.NOT_FOUND_404);
         return null;
     }
 
-    default QPHttpResponse post(Request request)
+    default QPHttpResponse post(QPHttpRequest request)
             throws QPHttpResponseException {
         QPHttpResponseBuilder.status(HttpStatus.NOT_FOUND_404);
         return null;
     }
 
-    default QPHttpResponse put(Request request)
+    default QPHttpResponse put(QPHttpRequest request)
             throws QPHttpResponseException {
         QPHttpResponseBuilder.status(HttpStatus.NOT_FOUND_404);
         return null;
     }
 
-    default QPHttpResponse delete(Request request)
+    default QPHttpResponse delete(QPHttpRequest request)
             throws QPHttpResponseException {
         QPHttpResponseBuilder.status(HttpStatus.NOT_FOUND_404);
         return null;
     }
 
-    default QPHttpResponse head(Request request)
+    default QPHttpResponse head(QPHttpRequest request)
             throws QPHttpResponseException {
         QPHttpResponseBuilder.status(HttpStatus.NOT_FOUND_404);
         return null;
     }
 
-    default QPHttpResponse options(Request request)
+    default QPHttpResponse options(QPHttpRequest request)
             throws QPHttpResponseException {
         QPHttpResponseBuilder.status(HttpStatus.NOT_FOUND_404);
         return null;
     }
 
-    default QPHttpResponse trace(Request request)
+    default QPHttpResponse trace(QPHttpRequest request)
             throws QPHttpResponseException {
         QPHttpResponseBuilder.status(HttpStatus.NOT_FOUND_404);
         return null;

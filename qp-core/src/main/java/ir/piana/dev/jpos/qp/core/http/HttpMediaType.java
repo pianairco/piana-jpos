@@ -1,5 +1,7 @@
 package ir.piana.dev.jpos.qp.core.http;
 
+import ir.piana.dev.jpos.qp.core.error.QPException;
+
 /**
  * @author Mohammad Rahmati, 1/19/2019
  */
@@ -19,5 +21,14 @@ public enum HttpMediaType {
 
     public String getCode() {
         return this.code;
+    }
+
+    public static HttpMediaType fromCode(String mediaType)
+            throws QPException {
+        for(HttpMediaType type : HttpMediaType.values()) {
+            if(type.code.equalsIgnoreCase(mediaType))
+                return type;
+        }
+        throw new QPException("not supported media type!");
     }
 }

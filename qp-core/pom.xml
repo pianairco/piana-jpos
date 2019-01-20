@@ -12,9 +12,9 @@
     <artifactId>qp-core</artifactId>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+        <!-- https://mvnrepository.com/artifact/com.google.name.gson/gson -->
         <dependency>
-            <groupId>com.google.code.gson</groupId>
+            <groupId>com.google.name.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.8.5</version>
         </dependency>
