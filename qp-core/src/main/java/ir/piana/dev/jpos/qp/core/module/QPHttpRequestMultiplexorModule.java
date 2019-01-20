@@ -56,7 +56,7 @@ public class QPHttpRequestMultiplexorModule
     }
 
     @Override
-    protected void startService() throws Exception {
+    protected void startQPModule() throws Exception {
         listener.submit(() -> {
             while (getState() == QBean.STARTED) {
                 try {

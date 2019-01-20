@@ -38,7 +38,7 @@ public class QPHttpServerModule extends QPBaseModule {
     }
 
     @Override
-    protected void startService() throws Exception {
+    protected void startQPModule() throws Exception {
         try {
             server.start();
         } catch (Exception e) {

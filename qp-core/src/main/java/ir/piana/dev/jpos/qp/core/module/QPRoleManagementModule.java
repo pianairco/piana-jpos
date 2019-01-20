@@ -27,8 +27,7 @@ public class QPRoleManagementModule
     }
 
     @Override
-    protected void startService() throws Exception {
-        NameRegistrar.register(getName(), this);
+    protected void startQPModule() throws Exception {
     }
 
     @Override

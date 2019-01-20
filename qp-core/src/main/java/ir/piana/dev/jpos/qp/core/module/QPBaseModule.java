@@ -6,10 +6,12 @@ import org.jpos.space.LocalSpace;
 import org.jpos.space.Space;
 import org.jpos.space.SpaceFactory;
 import org.jpos.space.SpaceListener;
+import org.jpos.util.NameRegistrar;
 
 import java.util.Arrays;
 
 public abstract class QPBaseModule extends QBeanSupport {
+    private boolean willBeRegistered;
     private Space space;
     private String spaceName;
     private String inQueue;
@@ -17,6 +19,7 @@ public abstract class QPBaseModule extends QBeanSupport {
 
     @Override
     protected final void initService() throws Exception {
+        willBeRegistered = cfg.getBoolean("qp-will-be-registered", true);
         spaceName = cfg.get("qp-space", "tspace:default");
         String defaultQueue = "";
         for (String name : this.getClass().getSimpleName()
@@ -32,9 +35,18 @@ public abstract class QPBaseModule extends QBeanSupport {
         initQPModule();
     }
 
+    @Override
+    protected final void startService() throws Exception {
+        if(willBeRegistered)
+            NameRegistrar.register(getName(), this);
+        startQPModule();
+    }
+
     protected abstract void configQPModule() throws Exception;
 
     protected abstract void initQPModule() throws Exception;
+
+    protected abstract void startQPModule() throws Exception;
 
     protected final void out(Object object) {
         space.out(outQueue, object);

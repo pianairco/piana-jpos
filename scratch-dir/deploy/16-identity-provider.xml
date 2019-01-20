@@ -4,9 +4,9 @@
     <!--<property name="qp-space" value="tspace:default" />-->
     <!--<property name="qp-in" value="qp-http-request-multiplexor-module-in" />-->
 
-    <!--<qp-role-management-type>database</qp-role-management-type>-->
     <qp-identity-management-type>in-memory</qp-identity-management-type>
     <qp-authorization-provider-type>basic</qp-authorization-provider-type>
+
     <qp-user>
         <username>user1</username>
         <password>123</password>

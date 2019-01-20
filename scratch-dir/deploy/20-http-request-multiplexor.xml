@@ -3,6 +3,7 @@
        logger="Q2">
     <property name="qp-space" value="tspace:default" />
     <property name="qp-in" value="qp-http-request-multiplexor-module-in" />
+    <property name="qp-will-be-registered" value="true" />
 
     <qp-identity-management>qp-identity-management</qp-identity-management>
     <qp-role-management>qp-role-management</qp-role-management>
@@ -17,8 +18,8 @@
         <qp-url>sample</qp-url>
         <qp-service>ir.piana.dev.jpos.qp.modules.sample.SampleHandler</qp-service>
         <qp-role>
-            <default></default>
-            <get>admin</get>
+            <default>admin</default>
+            <get>user</get>
         </qp-role>
     </qp-http-request>
 </qbean>

@@ -12,7 +12,8 @@ import java.util.List;
 import java.util.Map;
 
 public class QPIdentityManagementModule
-        extends QPBaseModule implements QPIdentityProvider {
+        extends QPBaseModule
+        implements QPIdentityProvider {
     protected IdentityManagementType identityManagementType;
     protected HttpAuthorizationType authorizationType;
     protected QPIdentityProvider identityProvider;
@@ -37,8 +38,7 @@ public class QPIdentityManagementModule
     }
 
     @Override
-    protected void startService() throws Exception {
-        NameRegistrar.register(getName(), this);
+    protected void startQPModule() throws Exception {
     }
 
     @Override

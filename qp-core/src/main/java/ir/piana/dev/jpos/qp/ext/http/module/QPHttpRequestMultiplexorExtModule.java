@@ -107,10 +107,7 @@ public class QPHttpRequestMultiplexorExtModule
     }
 
     @Override
-    protected void startService() throws Exception {
-        identityProvider = NameRegistrar.get(qpIdentityManagementName);
-        roleManager = NameRegistrar.get(qpRoleManagementName);
-
+    protected void startQPModule() throws Exception {
         listener.submit(() -> {
             while (getState() == QBean.STARTED) {
                 try {
@@ -170,14 +167,24 @@ public class QPHttpRequestMultiplexorExtModule
             QPHttpHandlerInfo handlerInfo,
             Request request, Response response)
             throws Exception {
+        identityProvider = NameRegistrar.get(qpIdentityManagementName);
+        roleManager = NameRegistrar.get(qpRoleManagementName);
+
         QPHttpHandlerExt httpHandlerExt = handlerInfo.getHttpHandlerExt();
         Map<String, Object> subjectMap = authorizationProvider
                 .provide(request);
         String identity = identityProvider.provide(
                 httpAuthorizationType, subjectMap);
         if(request.getMethod().equals(Method.POST)) {
-            makeResponse(response,
+            boolean b = roleManager.hasAnyRole(
+                    identity, handlerInfo.getRoles()
+                            .getRole(HttpMethodType.POST));
+            if(b)
+                makeResponse(response,
                     httpHandlerExt.post(request));
+            else
+                QPDefaultRequestHandlerType.UNAUTHORIZED.handle(
+                        request, response);
         } else if(request.getMethod().equals(Method.GET)) {
             boolean b = roleManager.hasAnyRole(
                     identity, handlerInfo.getRoles()
