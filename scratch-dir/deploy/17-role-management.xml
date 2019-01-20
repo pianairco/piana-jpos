@@ -1,4 +1,4 @@
-<qbean name="http-request-multiplexor"
+<qbean name="qp-role-management"
        class="ir.piana.dev.jpos.qp.core.module.QPRoleManagementModule"
        logger="Q2">
     <!--<property name="qp-space" value="tspace:default" />-->
@@ -8,12 +8,12 @@
     <qp-role-management-type>in-memory</qp-role-management-type>
     <qp-user>
         <identity>user1</identity>
-        <roles>user,admin</roles>
+        <roles>user</roles>
     </qp-user>
 
     <qp-user>
         <identity>user2</identity>
-        <roles>user</roles>
+        <roles>user,admin</roles>
     </qp-user>
 
 </qbean>

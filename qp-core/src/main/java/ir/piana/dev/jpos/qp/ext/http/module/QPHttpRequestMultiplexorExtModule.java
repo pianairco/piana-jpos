@@ -2,8 +2,16 @@ package ir.piana.dev.jpos.qp.ext.http.module;
 
 import com.google.gson.Gson;
 import ir.piana.dev.jpos.qp.core.error.QPException;
+import ir.piana.dev.jpos.qp.core.http.HttpMethodType;
+import ir.piana.dev.jpos.qp.core.http.QPDefaultRequestHandlerType;
+import ir.piana.dev.jpos.qp.core.security.authorize.AuthorizationProviderFactory;
+import ir.piana.dev.jpos.qp.core.security.authorize.HttpAuthorizationType;
 import ir.piana.dev.jpos.qp.core.http.HttpMediaType;
 import ir.piana.dev.jpos.qp.core.module.QPBaseModule;
+import ir.piana.dev.jpos.qp.core.security.authorize.QPAuthorizationProvider;
+import ir.piana.dev.jpos.qp.core.security.identity.IdentityManagementType;
+import ir.piana.dev.jpos.qp.core.security.identity.QPIdentityProvider;
+import ir.piana.dev.jpos.qp.core.security.role.QPRoleManager;
 import org.glassfish.grizzly.http.Method;
 import org.glassfish.grizzly.http.server.Request;
 import org.glassfish.grizzly.http.server.Response;
@@ -13,6 +21,7 @@ import org.jpos.space.SpaceListener;
 import org.jpos.transaction.Context;
 import org.jpos.util.LogEvent;
 import org.jpos.util.Logger;
+import org.jpos.util.NameRegistrar;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -31,9 +40,24 @@ public class QPHttpRequestMultiplexorExtModule
     protected ExecutorService listener;
     protected ExecutorService worker;
     protected Gson gson = new Gson();
+    protected HttpAuthorizationType httpAuthorizationType;
+    protected QPAuthorizationProvider authorizationProvider;
+    protected String qpIdentityManagementName;
+    protected QPIdentityProvider identityProvider;
+    protected String qpRoleManagementName;
+    protected QPRoleManager roleManager;
 
     @Override
     protected void configQPModule() throws Exception {
+
+        qpIdentityManagementName = getPersist()
+                .getChildText("qp-identity-management");
+        qpRoleManagementName = getPersist()
+                .getChildText("qp-role-management");
+        Element authElement = getPersist().getChild("qp-authorization");
+        String type = authElement.getChildText("type");
+        httpAuthorizationType = HttpAuthorizationType.fromCode(type);
+
         getPersist().getChildren("qp-http-request")
                 .parallelStream().forEach(httpRequest -> {
             try {
@@ -54,6 +78,13 @@ public class QPHttpRequestMultiplexorExtModule
                 String traceRoles = qpRoleElement.getChildText("trace");
 
                 QPHttpRole httpRole = new QPHttpRole(defaultRoles);
+                httpRole.setRole(HttpMethodType.GET, getRoles);
+                httpRole.setRole(HttpMethodType.POST, postRoles);
+                httpRole.setRole(HttpMethodType.PUT, putRoles);
+                httpRole.setRole(HttpMethodType.DELETE, deleteRoles);
+                httpRole.setRole(HttpMethodType.HEAD, headRoles);
+                httpRole.setRole(HttpMethodType.OPTIONS, optionsRoles);
+                httpRole.setRole(HttpMethodType.TRACE, traceRoles);
 
                 httpHandlerMap.put(url, new QPHttpHandlerInfo(url, handler, httpRole));
             } catch (ClassNotFoundException e) {
@@ -70,10 +101,16 @@ public class QPHttpRequestMultiplexorExtModule
     protected void initQPModule() throws Exception {
         listener = Executors.newSingleThreadExecutor();
         worker = Executors.newSingleThreadExecutor();
+        authorizationProvider = AuthorizationProviderFactory
+                .createAuthorizationProvider(
+                        httpAuthorizationType, getPersist());
     }
 
     @Override
     protected void startService() throws Exception {
+        identityProvider = NameRegistrar.get(qpIdentityManagementName);
+        roleManager = NameRegistrar.get(qpRoleManagementName);
+
         listener.submit(() -> {
             while (getState() == QBean.STARTED) {
                 try {
@@ -114,7 +151,9 @@ public class QPHttpRequestMultiplexorExtModule
             if (handlerInfo == null || handlerInfo.getHttpHandlerExt() == null)
                 NOT_FOUND.handle(request, response);
             else {
-                invokeHttpOperator(handlerInfo.getHttpHandlerExt(), request, response);
+                invokeHttpOperator(
+                        handlerInfo,
+                        request, response);
             }
         } catch (Exception e) {
             try {
@@ -128,30 +167,42 @@ public class QPHttpRequestMultiplexorExtModule
     }
 
     protected void invokeHttpOperator(
-            QPHttpHandlerExt operatorExt,
+            QPHttpHandlerInfo handlerInfo,
             Request request, Response response)
             throws Exception {
+        QPHttpHandlerExt httpHandlerExt = handlerInfo.getHttpHandlerExt();
+        Map<String, Object> subjectMap = authorizationProvider
+                .provide(request);
+        String identity = identityProvider.provide(
+                httpAuthorizationType, subjectMap);
         if(request.getMethod().equals(Method.POST)) {
             makeResponse(response,
-                    operatorExt.post(request));
+                    httpHandlerExt.post(request));
         } else if(request.getMethod().equals(Method.GET)) {
-            makeResponse(response,
-                    operatorExt.get(request));
+            boolean b = roleManager.hasAnyRole(
+                    identity, handlerInfo.getRoles()
+                            .getRole(HttpMethodType.GET));
+            if(b)
+                makeResponse(response,
+                        httpHandlerExt.get(request));
+            else
+                QPDefaultRequestHandlerType.UNAUTHORIZED.handle(
+                        request, response);
         } else if(request.getMethod().equals(Method.PUT)) {
             makeResponse(response,
-                    operatorExt.put(request));
+                    httpHandlerExt.put(request));
         } else if(request.getMethod().equals(Method.DELETE)) {
             makeResponse(response,
-                    operatorExt.delete(request));
+                    httpHandlerExt.delete(request));
         } else if(request.getMethod().equals(Method.HEAD)) {
             makeResponse(response,
-                    operatorExt.head(request));
+                    httpHandlerExt.head(request));
         } else if(request.getMethod().equals(Method.OPTIONS)) {
             makeResponse(response,
-                    operatorExt.options(request));
+                    httpHandlerExt.options(request));
         } else if(request.getMethod().equals(Method.TRACE)) {
             makeResponse(response,
-                    operatorExt.trace(request));
+                    httpHandlerExt.trace(request));
         }
     }
 

@@ -18,8 +18,10 @@ public class InMemoryRoleManager implements QPRoleManager {
         if(roles == null || roles.isEmpty())
             return true;
         if(userToRolesMap.containsKey(identity)) {
-            List<String> identityRoles = userToRolesMap.get(identity);
-//            if()
+            for (String identityRole : userToRolesMap.get(identity)) {
+                if(roles.contains(identityRole))
+                    return true;
+            }
         }
         return false;
     }
