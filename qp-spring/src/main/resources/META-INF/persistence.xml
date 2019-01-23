@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
+             version="2.2">
+
+    <persistence-unit name="judicature-pu">
+        <!--<class>ir.piana.dev.jpos.qp.spring.data.entity.UserRoleTblEntity</class>-->
+        <!--<class>ir.piana.dev.jpos.qp.spring.data.entity.UserTblEntity</class>-->
+        <!--<exclude-unlisted-classes />-->
+        <properties>
+            <!--<property name="eclipselink.weaving" value="false"/>-->
+            <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@192.168.50.56:1521:dmloradb"/>
+            <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
+        </properties>
+    </persistence-unit>
+</persistence>

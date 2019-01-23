@@ -60,6 +60,8 @@
     <modules>
         <module>qp-core</module>
         <module>qp-modules</module>
+        <module>qp-spring</module>
+        <module>sample-parent</module>
     </modules>
 
     <dependencies>

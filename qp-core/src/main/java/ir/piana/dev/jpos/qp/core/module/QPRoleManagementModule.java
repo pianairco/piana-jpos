@@ -1,29 +1,39 @@
 package ir.piana.dev.jpos.qp.core.module;
 
+import ir.piana.dev.jpos.qp.core.error.QPException;
 import ir.piana.dev.jpos.qp.core.security.role.QPRoleManager;
-import ir.piana.dev.jpos.qp.core.security.role.RoleManagementType;
-import ir.piana.dev.jpos.qp.core.security.role.RoleManagerFactory;
-import org.jpos.util.NameRegistrar;
+import ir.piana.dev.jpos.qp.core.security.role.QPRoleManagementType;
+import ir.piana.dev.jpos.qp.core.security.role.QPRoleManagerFactory;
+import org.jdom2.Element;
 
 import java.util.List;
 
 public class QPRoleManagementModule
         extends QPBaseModule implements QPRoleManager {
-    protected RoleManagementType roleManagementType;
+    protected QPRoleManagementType roleManagementType;
     protected QPRoleManager roleManager;
+    private Element roleManagementConfig;
 
     @Override
-    protected void configQPModule() throws Exception {
-        String roleManagementTypeCode = getPersist()
-                .getChildText("qp-role-management-type");
-        roleManagementType = RoleManagementType
-                .fromCode(roleManagementTypeCode);
+    protected void configBeforeRegisterQPModule() throws Exception {
+        roleManagementConfig = getPersist()
+                .getChild("qp-role-management");
     }
 
     @Override
-    protected void initQPModule() throws Exception {
-        roleManager = RoleManagerFactory
-                .createRoleManager(roleManagementType, getPersist());
+    protected void initBeforeRegisterQPModule() throws Exception {
+        roleManager = QPRoleManagerFactory
+                .createRoleManager(roleManagementConfig);
+    }
+
+    @Override
+    protected void initAfterRegisterQPModule() throws Exception {
+
+    }
+
+    @Override
+    protected void configAfterRegisterQPModule() throws Exception {
+
     }
 
     @Override
@@ -39,7 +49,9 @@ public class QPRoleManagementModule
     }
 
     @Override
-    public boolean hasAnyRole(String identity, List<String> roles) {
+    public boolean hasAnyRole(
+            String identity, List<String> roles)
+            throws QPException {
         return roleManager.hasAnyRole(identity, roles);
     }
 }

@@ -8,8 +8,6 @@ import org.jpos.space.SpaceFactory;
 import org.jpos.space.SpaceListener;
 import org.jpos.util.NameRegistrar;
 
-import java.util.Arrays;
-
 public abstract class QPBaseModule extends QBeanSupport {
     private boolean willBeRegistered;
     private Space space;
@@ -31,20 +29,26 @@ public abstract class QPBaseModule extends QBeanSupport {
         inQueue = cfg.get("qp-in", defaultQueue.concat("in"));
         outQueue = cfg.get("qp-out", defaultQueue.concat("out"));
         space = SpaceFactory.getSpace(spaceName);
-        configQPModule();
-        initQPModule();
+        configBeforeRegisterQPModule();
+        initBeforeRegisterQPModule();
+        if(willBeRegistered)
+            NameRegistrar.register(getName(), this);
     }
 
     @Override
     protected final void startService() throws Exception {
-        if(willBeRegistered)
-            NameRegistrar.register(getName(), this);
+        configAfterRegisterQPModule();
+        initAfterRegisterQPModule();
         startQPModule();
     }
 
-    protected abstract void configQPModule() throws Exception;
+    protected abstract void configBeforeRegisterQPModule() throws Exception;
 
-    protected abstract void initQPModule() throws Exception;
+    protected abstract void initBeforeRegisterQPModule() throws Exception;
+
+    protected abstract void initAfterRegisterQPModule() throws Exception;
+
+    protected abstract void configAfterRegisterQPModule() throws Exception;
 
     protected abstract void startQPModule() throws Exception;
 
@@ -66,5 +70,10 @@ public abstract class QPBaseModule extends QBeanSupport {
         if(objType.isInstance(in))
             return (T) in;
         throw new QPException("type conversion error");
+    }
+
+    public static final <T> T getModule(
+            String moduleInstanceName) {
+        return NameRegistrar.getIfExists(moduleInstanceName);
     }
 }

@@ -1,17 +1,17 @@
-package ir.piana.dev.jpos.qp.core.security.role;
+package ir.piana.dev.jpos.qp.core.security.identity;
 
 import ir.piana.dev.jpos.qp.core.error.QPException;
 
 /**
  * @author Mohammad Rahmati, 1/19/2019
  */
-public enum RoleManagementType {
+public enum QPIdentityManagementType {
     IN_MEMORY("in-memory"),
     DATABASE("database");
 
     private String code;
 
-    RoleManagementType(String code) {
+    QPIdentityManagementType(String code) {
         this.code = code;
     }
 
@@ -19,9 +19,9 @@ public enum RoleManagementType {
         return code;
     }
 
-    public static RoleManagementType fromCode(String code)
+    public static QPIdentityManagementType fromCode(String code)
             throws QPException {
-        for(RoleManagementType type : RoleManagementType.values()) {
+        for(QPIdentityManagementType type : QPIdentityManagementType.values()) {
             if(type.code.equalsIgnoreCase(code))
                 return type;
         }

@@ -5,12 +5,14 @@ import ir.piana.dev.jpos.qp.core.error.QPException;
 /**
  * @author Mohammad Rahmati, 1/20/2019
  */
-public enum HttpAuthorizationType {
-    BASIC("basic");
+public enum QPHttpAuthorizationType {
+    UNKNOWN("unknown"),
+    BASIC("basic"),
+    BEARER("bearer");
 
     private String code;
 
-    HttpAuthorizationType(String code) {
+    QPHttpAuthorizationType(String code) {
         this.code = code;
     }
 
@@ -18,10 +20,10 @@ public enum HttpAuthorizationType {
         return this.code;
     }
 
-    public static HttpAuthorizationType fromCode(String code)
+    public static QPHttpAuthorizationType fromCode(String code)
             throws QPException {
-        for(HttpAuthorizationType type :
-                HttpAuthorizationType.values()) {
+        for(QPHttpAuthorizationType type :
+                QPHttpAuthorizationType.values()) {
             if(type.code.equalsIgnoreCase(code))
                 return type;
         }

@@ -2,6 +2,7 @@ package ir.piana.dev.jpos.qp.ext.http.module;
 
 import ir.piana.dev.jpos.qp.core.error.QPHttpResponseException;
 import ir.piana.dev.jpos.qp.core.http.HttpMediaType;
+import ir.piana.dev.jpos.qp.core.http.QPDefaultRequestHandlerType;
 import org.glassfish.grizzly.http.util.HttpStatus;
 
 import java.nio.charset.Charset;
@@ -15,8 +16,10 @@ public class QPHttpResponseBuilder {
             throws QPHttpResponseException {
         QPHttpResponse response = new QPHttpResponse();
         response.httpStatus = httpStatus;
-        if(httpStatus.getStatusCode() != 200)
-            throw new QPHttpResponseException(httpStatus);
+        if(httpStatus != HttpStatus.OK_200)
+            throw new QPHttpResponseException(
+                    QPDefaultRequestHandlerType
+                            .fromCode(httpStatus.getStatusCode()));
         return new EntityInjectable(response);
     }
 

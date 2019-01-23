@@ -1,0 +1,34 @@
+<qbean name="qp-identity-management"
+       class="ir.piana.dev.jpos.qp.core.module.QPIdentityManagementModule"
+       logger="Q2">
+    <!--<property name="qp-space" value="tspace:default" />-->
+    <!--<property name="qp-in" value="qp-http-request-multiplexor-module-in" />-->
+
+    <qp-identity-management-type>database</qp-identity-management-type>
+    <qp-identity-config>
+        <qp-authorization-provider-type>basic</qp-authorization-provider-type>
+        <qp-database-manager>qp-database-manager</qp-database-manager>
+        <qp-database-instance>taxipay</qp-database-instance>
+        <qp-user-query>
+            <query>select identity from user_tbl where username=? and password=?</query>
+            <param order="1" type="string">username</param>
+            <param order="2" type="string">password</param>
+        </qp-user-query>
+    </qp-identity-config>
+
+    <!--<qp-identity-management-type>in-memory</qp-identity-management-type>-->
+    <!--<qp-identity-config>-->
+        <!--<qp-authorization-provider-type>basic</qp-authorization-provider-type>-->
+        <!--<qp-user>-->
+            <!--<username>user1</username>-->
+            <!--<password>123</password>-->
+            <!--<identity>user1</identity>-->
+        <!--</qp-user>-->
+        <!--<qp-user>-->
+            <!--<username>user2</username>-->
+            <!--<password>321</password>-->
+            <!--<identity>user2</identity>-->
+        <!--</qp-user>-->
+    <!--</qp-identity-config>-->
+
+</qbean>

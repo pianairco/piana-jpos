@@ -1,6 +1,6 @@
 package ir.piana.dev.jpos.qp.core.security.identity;
 
-import ir.piana.dev.jpos.qp.core.security.authorize.HttpAuthorizationType;
+import ir.piana.dev.jpos.qp.core.error.QPException;
 
 import java.util.Map;
 
@@ -9,6 +9,6 @@ import java.util.Map;
  */
 public interface QPIdentityProvider {
     String provide(
-            HttpAuthorizationType authorizationType,
-            Map<String, Object> subjectMap);
+            Map<String, Object> subjectMap)
+            throws QPException;
 }

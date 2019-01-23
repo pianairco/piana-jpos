@@ -5,13 +5,10 @@
     <property name="qp-in" value="qp-http-request-multiplexor-module-in" />
     <property name="qp-will-be-registered" value="true" />
 
-    <qp-identity-management>qp-identity-management</qp-identity-management>
-    <qp-role-management>qp-role-management</qp-role-management>
-
     <qp-authorization>
-        <type>basic</type>
-        <!--<type>bearer</type>-->
-
+        <authorization-provider-module>qp-authorization-provider</authorization-provider-module><!--basic|bearer-->
+        <identity-provider-module>qp-identity-management</identity-provider-module><!--in-memory|database-->
+        <role-management-module>qp-role-management</role-management-module>
     </qp-authorization>
 
     <qp-http-request>

@@ -1,0 +1,18 @@
+<qbean name="qp-authorization-provider"
+       class="ir.piana.dev.jpos.qp.core.module.QPAuthorizationProviderModule"
+       logger="Q2">
+    <!--<property name="qp-space" value="tspace:default" />-->
+    <!--<property name="qp-in" value="qp-http-request-multiplexor-module-in" />-->
+
+    <qp-authorization-provider-type>basic</qp-authorization-provider-type><!--basic|bearer-->
+
+    <qp-identity-provider type="database">
+        <qp-database-manager>qp-database-manager</qp-database-manager>
+        <qp-database-instance>judicature</qp-database-instance>
+        <qp-identity-query>
+            <query>select id from user_tbl where username=? and password=?</query>
+            <param order="1" type="string">username</param>
+            <param order="2" type="string">password</param>
+        </qp-identity-query>
+    </qp-identity-provider>
+</qbean>

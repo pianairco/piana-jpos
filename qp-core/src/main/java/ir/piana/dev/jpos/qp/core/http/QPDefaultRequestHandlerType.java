@@ -29,6 +29,15 @@ public enum QPDefaultRequestHandlerType {
         httpHandler.service(request, response);
     }
 
+    public static QPDefaultRequestHandlerType fromCode(int code) {
+        for (QPDefaultRequestHandlerType defaultRequestHandlerType :
+                QPDefaultRequestHandlerType.values()) {
+            if(defaultRequestHandlerType.code == code)
+                return defaultRequestHandlerType;
+        }
+        return QPDefaultRequestHandlerType.BAD_REQUEST;
+    }
+
     private static final class BadRequestHandler
             extends HttpHandler implements QPHttpOperator {
         @Override

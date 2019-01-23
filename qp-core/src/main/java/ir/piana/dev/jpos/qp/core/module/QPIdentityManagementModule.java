@@ -1,40 +1,46 @@
 package ir.piana.dev.jpos.qp.core.module;
 
-import ir.piana.dev.jpos.qp.core.security.authorize.HttpAuthorizationType;
-import ir.piana.dev.jpos.qp.core.security.identity.IdentityManagementType;
-import ir.piana.dev.jpos.qp.core.security.identity.IdentityProviderFactory;
+import ir.piana.dev.jpos.qp.core.error.QPException;
+import ir.piana.dev.jpos.qp.core.security.authorize.QPHttpAuthorizationType;
+import ir.piana.dev.jpos.qp.core.security.identity.QPIdentityManagementType;
+import ir.piana.dev.jpos.qp.core.security.identity.QPIdentityProviderFactory;
 import ir.piana.dev.jpos.qp.core.security.identity.QPIdentityProvider;
-import ir.piana.dev.jpos.qp.core.security.role.QPRoleManager;
-import ir.piana.dev.jpos.qp.core.security.role.RoleManagerFactory;
-import org.jpos.util.NameRegistrar;
 
-import java.util.List;
 import java.util.Map;
 
 public class QPIdentityManagementModule
         extends QPBaseModule
         implements QPIdentityProvider {
-    protected IdentityManagementType identityManagementType;
-    protected HttpAuthorizationType authorizationType;
+    protected QPIdentityManagementType identityManagementType;
+    protected QPHttpAuthorizationType authorizationType;
     protected QPIdentityProvider identityProvider;
 
     @Override
-    protected void configQPModule() throws Exception {
+    protected void configBeforeRegisterQPModule() throws Exception {
         String identityManagementTypeCode = getPersist()
                 .getChildText("qp-identity-management-type");
         String authorizationTypeCode = getPersist()
                 .getChildText("qp-authorization-provider-type");
-        identityManagementType = IdentityManagementType
+        identityManagementType = QPIdentityManagementType
                 .fromCode(identityManagementTypeCode);
-        authorizationType = HttpAuthorizationType
+        authorizationType = QPHttpAuthorizationType
                 .fromCode(authorizationTypeCode);
     }
 
     @Override
-    protected void initQPModule() throws Exception {
-        identityProvider = IdentityProviderFactory
+    protected void initBeforeRegisterQPModule() throws Exception {
+    }
+
+    @Override
+    protected void initAfterRegisterQPModule() throws Exception {
+
+    }
+
+    @Override
+    protected void configAfterRegisterQPModule() throws Exception {
+        identityProvider = QPIdentityProviderFactory
                 .createIdentityProvider(
-                        identityManagementType, getPersist());
+                        getPersist());
     }
 
     @Override
@@ -51,8 +57,8 @@ public class QPIdentityManagementModule
 
     @Override
     public String provide(
-            HttpAuthorizationType authorizationType,
-            Map<String, Object> subjectMap) {
-        return identityProvider.provide(authorizationType, subjectMap);
+            Map<String, Object> subjectMap)
+            throws QPException {
+        return identityProvider.provide(subjectMap);
     }
 }

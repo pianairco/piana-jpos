@@ -29,7 +29,7 @@ public class QPHttpRequestMultiplexorModule
     protected ExecutorService worker;
 
     @Override
-    protected void configQPModule() throws Exception {
+    protected void configBeforeRegisterQPModule() throws Exception {
         getPersist().getChildren("qp-http-request")
                 .parallelStream().forEach(httpRequest -> {
             try {
@@ -50,9 +50,19 @@ public class QPHttpRequestMultiplexorModule
     }
 
     @Override
-    protected void initQPModule() throws Exception {
+    protected void initBeforeRegisterQPModule() throws Exception {
         listener = Executors.newSingleThreadExecutor();
         worker = Executors.newSingleThreadExecutor();
+    }
+
+    @Override
+    protected void initAfterRegisterQPModule() throws Exception {
+
+    }
+
+    @Override
+    protected void configAfterRegisterQPModule() throws Exception {
+
     }
 
     @Override

@@ -11,14 +11,14 @@ import java.util.*;
 /**
  * @author Mohammad Rahmati, 1/19/2019
  */
-public class QPHttpRequest<T> {
+public class QPHttpRequest {
     private Request request;
 
     HttpMethodType httpMethodType;
     String body;
     HttpMediaType contentType;
     Map<String, String[]> queryParams;
-    T bodyObject;
+    Object bodyObject;
 
     QPHttpRequest(Request request)
             throws QPException {
@@ -43,15 +43,15 @@ public class QPHttpRequest<T> {
         }
     }
 
-    public T getBodyAs(Class classType)
+    public <T> T getBodyAs(Class classType)
             throws QPException {
         return getBodyAs(classType, false);
     }
 
-    public T getBodyAs(Class classType, boolean isClone)
+    public <T> T getBodyAs(Class classType, boolean isClone)
             throws QPException {
         if(!isClone && bodyObject != null)
-            return bodyObject;
+            return (T)bodyObject;
         if(!httpMethodType.canHasBody())
             throw new QPException("not have body");
         T bodyObject;

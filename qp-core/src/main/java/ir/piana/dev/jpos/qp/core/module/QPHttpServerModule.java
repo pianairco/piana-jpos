@@ -11,13 +11,13 @@ public class QPHttpServerModule extends QPBaseModule {
 
 
     @Override
-    protected void configQPModule() throws Exception {
+    protected void configBeforeRegisterQPModule() throws Exception {
         host = cfg.get("host", "localhost");
         port = cfg.getInt("port", 9090);
     }
 
     @Override
-    protected void initQPModule() throws Exception {
+    protected void initBeforeRegisterQPModule() throws Exception {
         server = new HttpServer();
         final ServerConfiguration config = server.getServerConfiguration();
         final NetworkListener listener =
@@ -35,6 +35,16 @@ public class QPHttpServerModule extends QPBaseModule {
                         out(context);
                     }
                 });
+    }
+
+    @Override
+    protected void initAfterRegisterQPModule() throws Exception {
+
+    }
+
+    @Override
+    protected void configAfterRegisterQPModule() throws Exception {
+
     }
 
     @Override
