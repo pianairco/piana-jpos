@@ -1,5 +1,6 @@
 package ir.piana.jpos.test.entity;
 
+import javax.persistence.*;
 import java.util.Objects;
 
 /**

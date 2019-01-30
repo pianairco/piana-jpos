@@ -2,6 +2,7 @@ package ir.piana.jpos.test.jpa;
 
 import ir.piana.dev.jpos.qp.spring.data.SpringDataConfig;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Mohammad Rahmati, 1/30/2019
