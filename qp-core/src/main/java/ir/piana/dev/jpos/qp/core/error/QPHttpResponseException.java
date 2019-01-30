@@ -1,6 +1,6 @@
 package ir.piana.dev.jpos.qp.core.error;
 
-import ir.piana.dev.jpos.qp.core.http.QPDefaultRequestHandlerType;
+import ir.piana.dev.jpos.qp.core.http.enums.QPDefaultRequestHandlerType;
 import org.glassfish.grizzly.http.server.Request;
 import org.glassfish.grizzly.http.server.Response;
 import org.glassfish.grizzly.http.util.HttpStatus;

@@ -48,11 +48,13 @@ public class QPIdentityManagementModule
     }
 
     @Override
-    protected void stopService() throws Exception {
+    protected void stopQPModule() throws Exception {
+
     }
 
     @Override
-    protected void destroyService() throws Exception {
+    protected void destroyQPModule() throws Exception {
+
     }
 
     @Override

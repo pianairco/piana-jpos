@@ -1,9 +1,7 @@
 package ir.piana.dev.jpos.qp.ext.http.module;
 
-import ir.piana.dev.jpos.qp.core.http.HttpMediaType;
+import ir.piana.dev.jpos.qp.core.http.enums.HttpMediaType;
 import org.glassfish.grizzly.http.util.HttpStatus;
-
-import java.nio.charset.Charset;
 
 /**
  * @author Mohammad Rahmati, 1/19/2019

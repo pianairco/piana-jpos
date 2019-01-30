@@ -13,6 +13,7 @@
 
     <modules>
         <module>qp-sample-module</module>
+        <module>http-basic-authorization</module>
     </modules>
 
     <dependencies>

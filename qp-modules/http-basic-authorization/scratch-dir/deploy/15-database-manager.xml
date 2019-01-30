@@ -1,0 +1,35 @@
+<qbean name="qp-database-manager"
+       class="ir.piana.dev.jpos.qp.core.module.QPDatabaseManagerModule"
+       logger="Q2">
+    <!--<property name="qp-space" value="tspace:default" />-->
+    <!--<property name="qp-in" value="qp-http-request-multiplexor-module-in" />-->
+
+    <spring-data-jpa>
+
+    </spring-data-jpa>
+
+    <datasource>
+        <instance-name>judicature</instance-name>
+        <database-platform>oracle</database-platform>
+        <jdbc-url>jdbc:oracle:thin:@192.168.50.56:1521:dmloradb</jdbc-url>
+        <driver-class-name>oracle.jdbc.driver.OracleDriver</driver-class-name>
+        <user>judicature</user>
+        <password>123456</password>
+        <sid>dmloradb</sid>
+        <pool-size>100</pool-size>
+    </datasource>
+
+    <!--<qp-identity-management-type>in-memory</qp-identity-management-type>-->
+    <!--<qp-authorization-provider-type>basic</qp-authorization-provider-type>-->
+    <!--<qp-user>-->
+        <!--<username>user1</username>-->
+        <!--<password>123</password>-->
+        <!--<identity>user1</identity>-->
+    <!--</qp-user>-->
+    <!--<qp-user>-->
+        <!--<username>user2</username>-->
+        <!--<password>321</password>-->
+        <!--<identity>user2</identity>-->
+    <!--</qp-user>-->
+
+</qbean>

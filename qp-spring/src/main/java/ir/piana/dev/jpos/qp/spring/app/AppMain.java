@@ -1,6 +1,5 @@
 package ir.piana.dev.jpos.qp.spring.app;
 
-import ir.piana.dev.jpos.qp.spring.data.dao.BaseDao;
 import ir.piana.dev.jpos.qp.spring.data.dao.QPBaseDao;
 import ir.piana.dev.jpos.qp.spring.data.dao.UserRepository;
 import ir.piana.dev.jpos.qp.spring.data.entity.UserTblEntity;
@@ -23,7 +22,7 @@ public class AppMain {
                 context.getBean(UserRepository.class);
         UserTblEntity byId = userRepository.findById(10000l);
 
-        BaseDao baseDao = (BaseDao)
+        QPBaseDao baseDao = (QPBaseDao)
                 context.getBean("QPBaseDao");
         ((QPBaseDao) baseDao).findById(UserTblEntity.class, 10000l);
         EntityManagerFactory entityManagerFactory =

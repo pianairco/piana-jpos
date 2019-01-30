@@ -1,8 +1,8 @@
 package ir.piana.dev.jpos.qp.core.module;
 
 import ir.piana.dev.jpos.qp.core.error.QPException;
-import ir.piana.dev.jpos.qp.core.http.QPHttpOperator;
-import ir.piana.dev.jpos.qp.core.http.QPHttpHandler;
+import ir.piana.dev.jpos.qp.core.http.operator.QPHttpOperator;
+import ir.piana.dev.jpos.qp.core.http.handler.QPHttpHandler;
 import org.glassfish.grizzly.http.Method;
 import org.glassfish.grizzly.http.server.Request;
 import org.glassfish.grizzly.http.server.Response;
@@ -17,8 +17,8 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static ir.piana.dev.jpos.qp.core.http.QPDefaultRequestHandlerType.INTERNAL_ERROR;
-import static ir.piana.dev.jpos.qp.core.http.QPDefaultRequestHandlerType.NOT_FOUND;
+import static ir.piana.dev.jpos.qp.core.http.enums.QPDefaultRequestHandlerType.INTERNAL_ERROR;
+import static ir.piana.dev.jpos.qp.core.http.enums.QPDefaultRequestHandlerType.NOT_FOUND;
 
 public class QPHttpRequestMultiplexorModule
         extends QPBaseModule
@@ -82,12 +82,12 @@ public class QPHttpRequestMultiplexorModule
     }
 
     @Override
-    protected void stopService() throws Exception {
+    protected void stopQPModule() throws Exception {
 
     }
 
     @Override
-    protected void destroyService() throws Exception {
+    protected void destroyQPModule() throws Exception {
 
     }
 

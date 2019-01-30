@@ -6,6 +6,8 @@ import ir.piana.dev.jpos.qp.core.error.QPException;
 import org.jdom2.Element;
 
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -73,11 +75,13 @@ public class QPDatabaseManagerModule extends QPBaseModule {
     }
 
     @Override
-    protected void stopService() throws Exception {
+    protected void stopQPModule() throws Exception {
+
     }
 
     @Override
-    protected void destroyService() throws Exception {
+    protected void destroyQPModule() throws Exception {
+
     }
 
     protected QPDatabaseManager getDatabaseManager() {
@@ -91,5 +95,29 @@ public class QPDatabaseManagerModule extends QPBaseModule {
             throws QPException {
         return databaseManager.executeQuery(
                 instanceName, queryStruct, paramValueMap);
+    }
+
+    public Map executeSelectFirstQuery(
+            String instanceName,
+            QPQueryStruct queryStruct,
+            Map<String, Object> paramValueMap)
+            throws QPException {
+        Map map = new LinkedHashMap();
+        try {
+            ResultSet resultSet = databaseManager.executeQuery(
+                    instanceName, queryStruct, paramValueMap);
+            if(resultSet.next()) {
+                ResultSetMetaData metaData = resultSet.getMetaData();
+                int columnCount = metaData.getColumnCount();
+                for(int i = 1; i <= columnCount; i++) {
+                    String columnLabel = metaData.getColumnLabel(i);
+                    Object object = resultSet.getObject(i);
+                    map.put(columnLabel, object);
+                }
+            }
+        } catch (SQLException e) {
+            throw new QPException(e);
+        }
+        return map;
     }
 }

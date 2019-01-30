@@ -1,6 +1,5 @@
 package ir.piana.dev.jpos.qp.core.module;
 
-import ir.piana.dev.jpos.qp.core.http.QPDefaultRequestHandlerType;
 import org.glassfish.grizzly.http.server.*;
 import org.jpos.transaction.Context;
 
@@ -57,10 +56,12 @@ public class QPHttpServerModule extends QPBaseModule {
     }
 
     @Override
-    protected void stopService() throws Exception {
+    protected void stopQPModule() throws Exception {
+
     }
 
     @Override
-    protected void destroyService() throws Exception {
+    protected void destroyQPModule() throws Exception {
+
     }
 }

@@ -52,11 +52,13 @@ public class QPAuthorizationProviderModule
     }
 
     @Override
-    protected void stopService() throws Exception {
+    protected void stopQPModule() throws Exception {
+
     }
 
     @Override
-    protected void destroyService() throws Exception {
+    protected void destroyQPModule() throws Exception {
+
     }
 
     public String provide(Request request)

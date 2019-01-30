@@ -2,8 +2,8 @@ package ir.piana.dev.jpos.qp.ext.http.module;
 
 import com.google.gson.Gson;
 import ir.piana.dev.jpos.qp.core.error.QPException;
-import ir.piana.dev.jpos.qp.core.http.HttpMediaType;
-import ir.piana.dev.jpos.qp.core.http.HttpMethodType;
+import ir.piana.dev.jpos.qp.core.http.enums.HttpMediaType;
+import ir.piana.dev.jpos.qp.core.http.enums.HttpMethodType;
 import org.glassfish.grizzly.http.server.Request;
 
 import java.util.*;

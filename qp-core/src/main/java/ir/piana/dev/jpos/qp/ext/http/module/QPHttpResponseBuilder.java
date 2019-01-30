@@ -1,8 +1,8 @@
 package ir.piana.dev.jpos.qp.ext.http.module;
 
 import ir.piana.dev.jpos.qp.core.error.QPHttpResponseException;
-import ir.piana.dev.jpos.qp.core.http.HttpMediaType;
-import ir.piana.dev.jpos.qp.core.http.QPDefaultRequestHandlerType;
+import ir.piana.dev.jpos.qp.core.http.enums.HttpMediaType;
+import ir.piana.dev.jpos.qp.core.http.enums.QPDefaultRequestHandlerType;
 import org.glassfish.grizzly.http.util.HttpStatus;
 
 import java.nio.charset.Charset;

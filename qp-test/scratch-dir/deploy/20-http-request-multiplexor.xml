@@ -1,0 +1,19 @@
+<qbean name="http-request-multiplexor"
+       class="ir.piana.dev.jpos.qp.ext.http.module.QPHttpRequestMultiplexorExtModule"
+       logger="Q2">
+    <property name="qp-space" value="tspace:default" />
+    <property name="qp-in" value="qp-http-request-multiplexor-module-in" />
+    <property name="qp-will-be-registered" value="true" />
+
+    <authorization-provider-module>http-basic-authorization</authorization-provider-module><!--basic|bearer-->
+    <!--<role-management-module>qp-role-management</role-management-module>-->
+
+    <qp-http-request>
+        <qp-url>sample</qp-url>
+        <qp-service>ir.piana.jpos.test.handler.SampleHandler</qp-service>
+        <qp-role>
+            <default>admin</default>
+            <get>user</get>
+        </qp-role>
+    </qp-http-request>
+</qbean>

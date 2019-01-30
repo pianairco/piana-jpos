@@ -2,7 +2,7 @@ package ir.piana.dev.jpos.qp.modules.sample;
 
 import ir.piana.dev.jpos.qp.core.error.QPException;
 import ir.piana.dev.jpos.qp.core.error.QPHttpResponseException;
-import ir.piana.dev.jpos.qp.core.http.HttpMediaType;
+import ir.piana.dev.jpos.qp.core.http.enums.HttpMediaType;
 import ir.piana.dev.jpos.qp.ext.http.module.QPHttpHandlerExt;
 import ir.piana.dev.jpos.qp.ext.http.module.QPHttpRequest;
 import ir.piana.dev.jpos.qp.ext.http.module.QPHttpResponse;

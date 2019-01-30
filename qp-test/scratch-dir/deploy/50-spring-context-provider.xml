@@ -1,0 +1,8 @@
+<qbean name="qp-spring-context-provider"
+       class="ir.piana.dev.jpos.qp.spring.module.QPSpringContextProviderModule"
+       logger="Q2">
+
+    <config-package>ir.piana.jpos.test.dao</config-package>
+    <config-bean>ir.piana.jpos.test.jpa.JudicatureConfig</config-bean>
+
+</qbean>

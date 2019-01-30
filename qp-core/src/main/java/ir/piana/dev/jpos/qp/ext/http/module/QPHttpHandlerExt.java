@@ -1,7 +1,6 @@
 package ir.piana.dev.jpos.qp.ext.http.module;
 
 import ir.piana.dev.jpos.qp.core.error.QPHttpResponseException;
-import org.glassfish.grizzly.http.server.Request;
 import org.glassfish.grizzly.http.util.HttpStatus;
 
 public interface QPHttpHandlerExt {

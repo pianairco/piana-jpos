@@ -2,6 +2,7 @@ package ir.piana.dev.jpos.qp.core.data.database;
 
 import ir.piana.dev.jpos.qp.core.error.QPException;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.util.List;
 import java.util.Map;
@@ -191,6 +192,11 @@ public class QPDatabaseManager {
         return dataSourceManager
                 .getDataSource(instanceName)
                 .getConnection();
+    }
+
+    public DataSource getDataSource(String instanceName) {
+        return dataSourceManager
+                .getDataSource(instanceName);
     }
 
     public ResultSet executeQuery(

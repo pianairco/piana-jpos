@@ -1,0 +1,12 @@
+<qbean name="qp-spring-data-jpa"
+       class="ir.piana.dev.jpos.qp.spring.module.QPSpringDataJpa"
+       logger="Q2">
+    <qp-jpa-instance name="spring1">
+        <datasource-manager-name>qp-database-manager</datasource-manager-name>
+        <datasource-instance-name>judicature</datasource-instance-name>
+        <database-platform>oracle</database-platform>
+        <jpa-provider>eclipselink</jpa-provider>
+        <persistence-unit-name>first-pu</persistence-unit-name>
+        <base-package>ir.piana</base-package>
+    </qp-jpa-instance>
+</qbean>

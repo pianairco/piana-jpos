@@ -3,10 +3,12 @@ package ir.piana.dev.jpos.qp.ext.http.module;
 import com.google.gson.Gson;
 import ir.piana.dev.jpos.qp.core.error.QPException;
 import ir.piana.dev.jpos.qp.core.error.QPHttpResponseException;
-import ir.piana.dev.jpos.qp.core.http.HttpMethodType;
-import ir.piana.dev.jpos.qp.core.http.QPDefaultRequestHandlerType;
+import ir.piana.dev.jpos.qp.core.http.QPHttpAuthorizable;
+import ir.piana.dev.jpos.qp.core.http.QPHttpRoleManageable;
+import ir.piana.dev.jpos.qp.core.http.enums.HttpMethodType;
+import ir.piana.dev.jpos.qp.core.http.enums.QPDefaultRequestHandlerType;
 import ir.piana.dev.jpos.qp.core.module.QPAuthorizationProviderModule;
-import ir.piana.dev.jpos.qp.core.http.HttpMediaType;
+import ir.piana.dev.jpos.qp.core.http.enums.HttpMediaType;
 import ir.piana.dev.jpos.qp.core.module.QPBaseModule;
 import ir.piana.dev.jpos.qp.core.security.identity.QPIdentityProvider;
 import ir.piana.dev.jpos.qp.core.security.role.QPRoleManager;
@@ -26,8 +28,8 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static ir.piana.dev.jpos.qp.core.http.QPDefaultRequestHandlerType.INTERNAL_ERROR;
-import static ir.piana.dev.jpos.qp.core.http.QPDefaultRequestHandlerType.NOT_FOUND;
+import static ir.piana.dev.jpos.qp.core.http.enums.QPDefaultRequestHandlerType.INTERNAL_ERROR;
+import static ir.piana.dev.jpos.qp.core.http.enums.QPDefaultRequestHandlerType.NOT_FOUND;
 
 public class QPHttpRequestMultiplexorExtModule
         extends QPBaseModule
@@ -40,20 +42,14 @@ public class QPHttpRequestMultiplexorExtModule
 //    protected HttpAuthorizationType httpAuthorizationType;
 
     protected String authorizationProviderModuleName;
-    protected String identityProviderModuleName;
-    protected String roleManagementModuleName;
+//    protected String roleManagementModuleName;
 
     @Override
     protected void configBeforeRegisterQPModule() throws Exception {
-        Element authElement = getPersist().getChild("qp-authorization");
-//        String type = authElement.getChildText("type");
-        authorizationProviderModuleName = authElement
+        authorizationProviderModuleName = getPersist()
                 .getChildText("authorization-provider-module");
-        identityProviderModuleName = authElement
-                .getChildText("identity-provider-module");
-        roleManagementModuleName = authElement
-                .getChildText("role-management-module");
-//        httpAuthorizationType = HttpAuthorizationType.fromCode(type);
+//        roleManagementModuleName = authElement
+//                .getChildText("role-management-module");
 
         getPersist().getChildren("qp-http-request")
                 .parallelStream().forEach(httpRequest -> {
@@ -130,12 +126,12 @@ public class QPHttpRequestMultiplexorExtModule
     }
 
     @Override
-    protected void stopService() throws Exception {
+    protected void stopQPModule() throws Exception {
 
     }
 
     @Override
-    protected void destroyService() throws Exception {
+    protected void destroyQPModule() throws Exception {
 
     }
 
@@ -186,21 +182,24 @@ public class QPHttpRequestMultiplexorExtModule
             QPHttpHandlerInfo handlerInfo,
             Request request, Response response)
             throws Exception {
-        QPAuthorizationProviderModule authorizationProvider = QPBaseModule
+        QPHttpAuthorizable authorizable = QPBaseModule
                 .getModule(authorizationProviderModuleName);
-        QPIdentityProvider identityProvider = QPBaseModule
-                .getModule(identityProviderModuleName);
-        QPRoleManager roleManager = QPBaseModule
-                .getModule(roleManagementModuleName);
+        QPHttpRequest httpRequest = new QPHttpRequest(request);
+//        QPHttpRoleManageable roleManageable = authorizable
+//                .authorize(httpRequest);
+
+//        QPAuthorizationProviderModule authorizationProvider = QPBaseModule
+//                .getModule(authorizationProviderModuleName);
+//        QPRoleManager roleManager = QPBaseModule
+//                .getModule(roleManagementModuleName);
 
         QPHttpHandlerExt httpHandlerExt = handlerInfo.getHttpHandlerExt();
-        String identity = authorizationProvider
-                .provide(request);
+        boolean b = true;
 
-        boolean b = roleManager.hasAnyRole(
-                identity, handlerInfo.getRoles()
-                        .getRole(HttpMethodType.fromCode(
-                                request.getMethod().getMethodString())));
+//        boolean b = roleManager.hasAnyRole(
+//                identity, handlerInfo.getRoles()
+//                        .getRole(HttpMethodType.fromCode(
+//                                request.getMethod().getMethodString())));
         if(!b)
             QPDefaultRequestHandlerType.UNAUTHORIZED
                     .handle(request, response);

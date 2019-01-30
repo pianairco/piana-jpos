@@ -1,6 +1,6 @@
 package ir.piana.dev.jpos.qp.ext.http.module;
 
-import ir.piana.dev.jpos.qp.core.http.HttpMethodType;
+import ir.piana.dev.jpos.qp.core.http.enums.HttpMethodType;
 
 import java.util.ArrayList;
 import java.util.Arrays;

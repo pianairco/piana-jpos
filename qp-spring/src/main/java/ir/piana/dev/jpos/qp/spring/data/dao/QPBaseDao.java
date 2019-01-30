@@ -16,7 +16,7 @@ import java.util.List;
  */
 @Repository(value = "QPBaseDao")
 @Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class QPBaseDao<T> implements BaseDao<T> {
+public class QPBaseDao<T> implements QPDao<T> {
     @PersistenceContext(type = PersistenceContextType.TRANSACTION)
     EntityManager entityManager;
 

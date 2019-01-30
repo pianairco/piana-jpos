@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>piana-spring</artifactId>
+    <artifactId>qp-spring</artifactId>
 
     <properties>
         <spring.version>5.1.4.RELEASE</spring.version>
@@ -17,6 +17,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>ir.piana.dev.jpos</groupId>
+            <artifactId>qp-core</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
         <!--<dependency>-->
             <!--<groupId>org.springframework</groupId>-->
@@ -33,6 +38,12 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
             <version>${spring.data.jpa.version}</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework/spring-aspects -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aspects</artifactId>
+            <version>${spring.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.eclipse.persistence/javax.persistence -->
         <dependency>

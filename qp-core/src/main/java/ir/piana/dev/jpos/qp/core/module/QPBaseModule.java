@@ -16,7 +16,8 @@ public abstract class QPBaseModule extends QBeanSupport {
     private String outQueue;
 
     @Override
-    protected final void initService() throws Exception {
+    protected final void initService()
+            throws Exception {
         willBeRegistered = cfg.getBoolean("qp-will-be-registered", true);
         spaceName = cfg.get("qp-space", "tspace:default");
         String defaultQueue = "";
@@ -36,21 +37,40 @@ public abstract class QPBaseModule extends QBeanSupport {
     }
 
     @Override
-    protected final void startService() throws Exception {
+    protected final void startService()
+            throws Exception {
         configAfterRegisterQPModule();
         initAfterRegisterQPModule();
         startQPModule();
+    }
+
+    @Override
+    protected final void stopService()
+            throws Exception {
+        if(willBeRegistered)
+            NameRegistrar.unregister(getName());
+        stopQPModule();
+    }
+
+    @Override
+    protected final void destroyService()
+            throws Exception {
+        destroyQPModule();
     }
 
     protected abstract void configBeforeRegisterQPModule() throws Exception;
 
     protected abstract void initBeforeRegisterQPModule() throws Exception;
 
-    protected abstract void initAfterRegisterQPModule() throws Exception;
-
     protected abstract void configAfterRegisterQPModule() throws Exception;
 
+    protected abstract void initAfterRegisterQPModule() throws Exception;
+
     protected abstract void startQPModule() throws Exception;
+
+    protected abstract void stopQPModule() throws Exception;
+
+    protected abstract void destroyQPModule() throws Exception;
 
     protected final void out(Object object) {
         space.out(outQueue, object);

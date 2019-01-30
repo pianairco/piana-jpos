@@ -11,6 +11,23 @@
 
     <artifactId>qp-core</artifactId>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
         <!-- https://mvnrepository.com/artifact/com.google.name.gson/gson -->
         <dependency>
@@ -30,6 +47,12 @@
             <!--<version>2.7.4</version>-->
         <!--</dependency>-->
         <!-- https://mvnrepository.com/artifact/oracle/ojdbc6 -->
+        <!-- https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api -->
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>javax.persistence-api</artifactId>
+            <version>2.2</version>
+        </dependency>
         <dependency>
             <groupId>oracle</groupId>
             <artifactId>ojdbc6</artifactId>
