@@ -25,9 +25,12 @@ public class QPHttpRequest {
         this.request = request;
         httpMethodType = HttpMethodType.fromCode(
                 request.getMethod().getMethodString());
-        contentType = HttpMediaType
-                .fromCode((String)request
-                        .getHeader("content-type"));
+        if(httpMethodType == HttpMethodType.POST ||
+                httpMethodType == HttpMethodType.PUT) {
+            contentType = HttpMediaType
+                    .fromCode((String) request
+                            .getHeader("content-type"));
+        }
         queryParams = Collections.unmodifiableMap(
                 request.getParameterMap());
     }

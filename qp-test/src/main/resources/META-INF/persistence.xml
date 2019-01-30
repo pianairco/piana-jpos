@@ -5,6 +5,9 @@
              version="2.2">
 
     <persistence-unit name="first-pu">
-        <class>ir.piana.dev.jpos.qp.spring.data.entity.UserTblEntity</class>
+        <!--<class>ir.piana.jpos.test.entity.UserTblEntity</class>-->
+    </persistence-unit>
+
+    <persistence-unit name="second-pu">
     </persistence-unit>
 </persistence>

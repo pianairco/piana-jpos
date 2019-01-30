@@ -50,10 +50,10 @@ public final class QPSpringContextProviderModule extends QPBaseModule {
 
     @Override
     protected void startQPModule() throws Exception {
-        configBeanList.parallelStream().forEach(bean -> {
+        configBeanList.stream().forEach(bean -> {
             springContext.register(bean);
         });
-        configPackageList.parallelStream().forEach(packageName -> {
+        configPackageList.stream().forEach(packageName -> {
             springContext.scan(packageName);
         });
         springContext.refresh();

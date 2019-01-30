@@ -14,36 +14,36 @@ import java.util.List;
 /**
  * @author Mohammad Rahmati, 1/22/2019
  */
-@Repository(value = "QPBaseDao")
-@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class QPBaseDao<T> implements QPDao<T> {
-    @PersistenceContext(type = PersistenceContextType.TRANSACTION)
-    EntityManager entityManager;
+//@Repository(value = "QPBaseDao")
+//@Scope(value = ConfigurableBeanFactory.SCOPE_SINGLETON)
+public abstract class QPBaseDao<T> implements QPDao<T> {
+//    @PersistenceContext(type = PersistenceContextType.TRANSACTION)
+//    EntityManager entityManager;
 
     protected CriteriaBuilder criteriaBuilder;
 
-    @PostConstruct
-    private void postConstruct() {
-        criteriaBuilder = entityManager.getCriteriaBuilder();
-    }
+//    @PostConstruct
+//    private void postConstruct() {
+//        criteriaBuilder = entityManager.getCriteriaBuilder();
+//    }
 
-    @Override
-    public EntityManager getEntityManager() {
-        return entityManager;
-    }
+//    @Override
+//    public EntityManager getEntityManager() {
+//        return entityManager;
+//    }
 
-    @Override
-    public CriteriaBuilder getCriteriaBuilder() {
-        return criteriaBuilder;
-    }
+//    @Override
+//    public CriteriaBuilder getCriteriaBuilder() {
+//        return criteriaBuilder;
+//    }
 
-    public T findById(Class entityClazz, long id) {
-        T entity = (T)entityManager.find(entityClazz, id);
+    public T findById(Class<T> entityClazz, long id) {
+        T entity = (T)getEntityManager().find(entityClazz, id);
         return entity;
     }
 
-    public List<T> findAll(Class entityClazz) {
-        List<T> entityList = entityManager.createNamedQuery(
+    public List<T> findAll(Class<T> entityClazz) {
+        List<T> entityList = getEntityManager().createNamedQuery(
                 entityClazz.getSimpleName().concat(".selectAll"),
                 entityClazz).getResultList();
         return entityList;

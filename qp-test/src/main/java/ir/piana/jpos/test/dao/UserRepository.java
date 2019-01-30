@@ -1,6 +1,6 @@
 package ir.piana.jpos.test.dao;
 
-import ir.piana.dev.jpos.qp.spring.data.entity.UserTblEntity;
+import ir.piana.jpos.test.entity.UserTblEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

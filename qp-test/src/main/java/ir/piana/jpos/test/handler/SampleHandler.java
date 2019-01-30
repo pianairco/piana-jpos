@@ -8,9 +8,9 @@ import ir.piana.dev.jpos.qp.ext.http.module.QPHttpHandlerExt;
 import ir.piana.dev.jpos.qp.ext.http.module.QPHttpRequest;
 import ir.piana.dev.jpos.qp.ext.http.module.QPHttpResponse;
 import ir.piana.dev.jpos.qp.ext.http.module.QPHttpResponseBuilder;
-import ir.piana.dev.jpos.qp.spring.data.entity.UserTblEntity;
 import ir.piana.dev.jpos.qp.spring.module.QPSpringContextProviderModule;
-import ir.piana.jpos.test.dao.UserRepository;
+import ir.piana.jpos.test.dao.UserDao;
+import ir.piana.jpos.test.entity.UserTblEntity;
 import org.glassfish.grizzly.http.util.HttpStatus;
 
 import java.util.Map;
@@ -25,8 +25,12 @@ public class SampleHandler implements QPHttpHandlerExt {
 
         QPSpringContextProviderModule module = QPBaseModule
                 .getModule("qp-spring-context-provider");
-        UserRepository bean = module.getBean(UserRepository.class);
-        UserTblEntity byId = bean.findById(10000);
+//        UserRepository bean = module.getBean(UserRepository.class);
+//        UserTblEntity byId = bean.findById(10000);
+
+        UserDao userDao = module.getBean(UserDao.class);
+        UserTblEntity byId = (UserTblEntity) userDao.findById(
+                UserTblEntity.class, 10000);
 
 
         return QPHttpResponseBuilder.status(HttpStatus.OK_200)
@@ -41,8 +45,9 @@ public class SampleHandler implements QPHttpHandlerExt {
             throws QPHttpResponseException {
         QPSpringContextProviderModule module = QPBaseModule
                 .getModule("qp-spring-context-provider");
-        UserRepository bean = module.getBean(UserRepository.class);
-        UserTblEntity byId = bean.findById(10000);
+        UserDao userDao = module.getBean(UserDao.class);
+        UserTblEntity byId = (UserTblEntity) userDao.findById(
+                UserTblEntity.class, 10000);
 
 
         Map<String, String> map = null;
