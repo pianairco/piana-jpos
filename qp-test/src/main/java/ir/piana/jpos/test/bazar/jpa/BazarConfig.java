@@ -1,9 +1,11 @@
-package ir.piana.jpos.test.sima2.jpa;
+package ir.piana.jpos.test.bazar.jpa;
 
 import ir.piana.dev.jpos.qp.spring.data.SpringDataConfig;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 
 import javax.persistence.EntityManagerFactory;
@@ -12,11 +14,11 @@ import javax.persistence.EntityManagerFactory;
  * @author Mohammad Rahmati, 1/30/2019
  */
 @Configuration
-//@PropertySource(value = "file:./application.properties")
+@PropertySource(value = "file:./application.properties")
 //@EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
 //@EnableAspectJAutoProxy(proxyTargetClass = true)
-public class Sima2Config extends SpringDataConfig {
-    @Value("${qp.spring.jpa.module2}")
+public class BazarConfig extends SpringDataConfig {
+    @Value("${qp.spring.jpa.module.bazar}")
     private String qpJpaModuleName;
 
     @Override
@@ -24,14 +26,14 @@ public class Sima2Config extends SpringDataConfig {
         return qpJpaModuleName;
     }
 
-    @Bean(name = "sima2EntityManagerFactory")
+    @Bean(name = "BazarEntityManagerFactory")
     public EntityManagerFactory getEntityManagerFactory() {
         return super.entityManagerFactory();
     }
 
-    @Bean(name = "sima2TransactionManager")
+    @Bean(name = "BazarTransactionManager")
     protected JpaTransactionManager getTransactionManager(
-            EntityManagerFactory entityManagerFactory) {
+            @Qualifier("BazarEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return super.transactionManager(entityManagerFactory);
     }
 }

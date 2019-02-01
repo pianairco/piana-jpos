@@ -33,14 +33,12 @@ import java.util.Properties;
 public abstract class SpringDataConfig {
     protected abstract String getJpaModuleName();
 
-    @Bean(name = "entityManagerFactory")
-    public EntityManagerFactory entityManagerFactory() {
+    protected final EntityManagerFactory entityManagerFactory() {
         QPJpaManagerModule module = QPBaseModule.getModule(getJpaModuleName());
         return module.getEntityManagerFactory();
     }
 
-    @Bean
-    public JpaTransactionManager transactionManager(
+    protected final JpaTransactionManager transactionManager(
             EntityManagerFactory entityManagerFactory) {
         JpaTransactionManager txManager = new JpaTransactionManager();
         txManager.setEntityManagerFactory(entityManagerFactory);

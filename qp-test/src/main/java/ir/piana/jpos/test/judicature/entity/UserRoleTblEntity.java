@@ -1,4 +1,4 @@
-package ir.piana.jpos.test.entity;
+package ir.piana.jpos.test.judicature.entity;
 
 import javax.persistence.*;
 import java.util.Objects;

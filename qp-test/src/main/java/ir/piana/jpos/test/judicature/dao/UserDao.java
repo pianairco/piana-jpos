@@ -1,4 +1,4 @@
-package ir.piana.jpos.test.dao;
+package ir.piana.jpos.test.judicature.dao;
 
 import ir.piana.dev.jpos.qp.spring.data.dao.QPBaseDao;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;

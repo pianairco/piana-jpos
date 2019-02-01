@@ -1,8 +1,12 @@
-package ir.piana.jpos.test.jpa;
+package ir.piana.jpos.test.judicature.jpa;
 
 import ir.piana.dev.jpos.qp.spring.data.SpringDataConfig;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.orm.jpa.JpaTransactionManager;
+
+import javax.persistence.EntityManagerFactory;
 
 /**
  * @author Mohammad Rahmati, 1/30/2019
@@ -14,6 +18,17 @@ import org.springframework.context.annotation.Configuration;
 public class JudicatureConfig extends SpringDataConfig {
     @Value("${qp.spring.jpa.module}")
     private String qpJpaModuleName;
+
+    @Bean(name = "judicatureEntityManagerFactory")
+    public EntityManagerFactory getEntityManagerFactory() {
+        return super.entityManagerFactory();
+    }
+
+    @Bean(name = "judicatureTransactionManager")
+    protected JpaTransactionManager getTransactionManager(
+            EntityManagerFactory entityManagerFactory) {
+        return super.transactionManager(entityManagerFactory);
+    }
 
     @Override
     protected String getJpaModuleName() {
