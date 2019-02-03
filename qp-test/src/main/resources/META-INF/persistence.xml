@@ -4,12 +4,20 @@
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd"
              version="2.2">
 
-    <!--<persistence-unit name="first-pu">-->
-        <!--&lt;!&ndash;<class>ir.piana.jpos.test.judicature.entity.UserTblEntity</class>&ndash;&gt;-->
+    <persistence-unit name="first-pu">
+        <!--<class>ir.piana.jpos.test.judicature.entity.UserTblEntity</class>-->
+    </persistence-unit>
+
+    <persistence-unit name="second-pu"></persistence-unit>
+
+    <!--<persistence-unit name="bazar-pu">-->
+        <!--<properties>-->
+            <!--<property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>-->
+        <!--</properties>-->
     <!--</persistence-unit>-->
-
-    <!--<persistence-unit name="second-pu"></persistence-unit>-->
-
-    <persistence-unit name="bazar-pu"></persistence-unit>
-    <persistence-unit name="party-pu"></persistence-unit>
+    <!--<persistence-unit name="party-pu">-->
+        <!--<properties>-->
+            <!--<property name="eclipselink.ddl-generation" value="drop-and-create-tables"/>-->
+        <!--</properties>-->
+    <!--</persistence-unit>-->
 </persistence>

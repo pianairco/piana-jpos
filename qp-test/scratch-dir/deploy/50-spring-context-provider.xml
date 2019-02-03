@@ -4,14 +4,17 @@
 
     <!--<config-package>ir.piana.jpos.test.judicature.dao</config-package>-->
 
-    <config-bean>ir.piana.jpos.test.bazar.jpa.BazarConfig</config-bean>
-    <config-package>ir.piana.jpos.test.bazar.dao</config-package>
+    <!--<config-bean>ir.piana.jpos.test.bazar.jpa.BazarConfig</config-bean>-->
+    <!--<config-package>ir.piana.jpos.test.bazar.dao</config-package>-->
     <!--<config-bean>ir.piana.jpos.test.bazar.dao.CountryDao</config-bean>-->
 
-    <config-bean>ir.piana.jpos.test.party.jpa.PartyConfig</config-bean>
-    <config-package>ir.piana.jpos.test.party.dao</config-package>
+    <!--<config-bean>ir.piana.jpos.test.party.jpa.PartyConfig</config-bean>-->
+    <!--<config-package>ir.piana.jpos.test.party.dao</config-package>-->
 
-    <!--<config-bean>ir.piana.jpos.test.judicature.jpa.JudicatureConfig</config-bean>-->
-    <!--<config-bean>ir.piana.jpos.test.sima2.jpa.Sima2Config</config-bean>-->
+    <config-bean>ir.piana.jpos.test.judicature.jpa.JudicatureConfig</config-bean>
+    <config-package>ir.piana.jpos.test.judicature.dao</config-package>
+
+    <config-bean>ir.piana.jpos.test.sima2.jpa.Sima2Config</config-bean>
+    <config-package>ir.piana.jpos.test.sima2.dao</config-package>
 
 </qbean>

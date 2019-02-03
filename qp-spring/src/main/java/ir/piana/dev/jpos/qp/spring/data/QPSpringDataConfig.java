@@ -30,7 +30,7 @@ import java.util.Properties;
 @PropertySource(value = "file:./application.properties")
 @EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
 @EnableAspectJAutoProxy(proxyTargetClass = true)
-public abstract class SpringDataConfig {
+public abstract class QPSpringDataConfig {
     protected abstract String getJpaModuleName();
 
     protected final EntityManagerFactory entityManagerFactory() {

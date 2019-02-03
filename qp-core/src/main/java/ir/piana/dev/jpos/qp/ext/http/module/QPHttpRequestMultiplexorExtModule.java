@@ -182,9 +182,13 @@ public class QPHttpRequestMultiplexorExtModule
             QPHttpHandlerInfo handlerInfo,
             Request request, Response response)
             throws Exception {
+
+        QPHttpRequest httpRequest = new QPHttpRequest(request);
+
         QPHttpAuthorizable authorizable = QPBaseModule
                 .getModule(authorizationProviderModuleName);
-        QPHttpRequest httpRequest = new QPHttpRequest(request);
+        authorizable.authorize(httpRequest)
+                .hasAnyRoles(httpRequest);
 //        QPHttpRoleManageable roleManageable = authorizable
 //                .authorize(httpRequest);
 

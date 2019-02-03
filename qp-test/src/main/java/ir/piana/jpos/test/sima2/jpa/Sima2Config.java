@@ -1,6 +1,7 @@
 package ir.piana.jpos.test.sima2.jpa;
 
-import ir.piana.dev.jpos.qp.spring.data.SpringDataConfig;
+import ir.piana.dev.jpos.qp.spring.data.QPSpringDataConfig;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +16,8 @@ import javax.persistence.EntityManagerFactory;
 //@PropertySource(value = "file:./application.properties")
 //@EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
 //@EnableAspectJAutoProxy(proxyTargetClass = true)
-public class Sima2Config extends SpringDataConfig {
-    @Value("${qp.spring.jpa.module2}")
+public class Sima2Config extends QPSpringDataConfig {
+    @Value("${qp.spring.jpa.module.sima2}")
     private String qpJpaModuleName;
 
     @Override
@@ -31,7 +32,7 @@ public class Sima2Config extends SpringDataConfig {
 
     @Bean(name = "sima2TransactionManager")
     protected JpaTransactionManager getTransactionManager(
-            EntityManagerFactory entityManagerFactory) {
+            @Qualifier("sima2EntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return super.transactionManager(entityManagerFactory);
     }
 }

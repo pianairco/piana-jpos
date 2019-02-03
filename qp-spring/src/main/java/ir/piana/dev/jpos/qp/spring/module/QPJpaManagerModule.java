@@ -44,6 +44,7 @@ public class QPJpaManagerModule extends QPBaseModule {
                 user, password,
                 sid, poolSize);
 
+
         datasource = QPDataSourceFactory
                 .createDatasource(connectionInfo);
 

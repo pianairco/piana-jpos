@@ -21,6 +21,22 @@
         <base-package>ir.piana.jpos.test.party.entity</base-package>
     </entity-manager-factory>
 
+    <!--<datasource name="datasource-party">-->
+        <!--<database-platform>derby</database-platform>-->
+        <!--<jdbc-url>jdbc:derby:party_db;create=true</jdbc-url>-->
+        <!--<driver-class-name>org.apache.derby.jdbc.EmbeddedDriver</driver-class-name>-->
+        <!--<user></user>-->
+        <!--<password></password>-->
+        <!--<sid></sid>-->
+        <!--<pool-size>100</pool-size>-->
+    <!--</datasource>-->
+
+    <!--<entity-manager-factory name="entity-manager-factory-party">-->
+        <!--<database-platform>derby</database-platform>-->
+        <!--<jpa-provider>eclipselink</jpa-provider>-->
+        <!--<persistence-unit-name>party-pu</persistence-unit-name>-->
+        <!--<base-package>ir.piana.jpos.test.party.entity</base-package>-->
+    <!--</entity-manager-factory>-->
 
 
     <!--<qp-identity-management-type>in-memory</qp-identity-management-type>-->

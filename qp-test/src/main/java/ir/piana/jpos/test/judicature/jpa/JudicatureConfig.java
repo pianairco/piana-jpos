@@ -1,6 +1,7 @@
 package ir.piana.jpos.test.judicature.jpa;
 
-import ir.piana.dev.jpos.qp.spring.data.SpringDataConfig;
+import ir.piana.dev.jpos.qp.spring.data.QPSpringDataConfig;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,8 +16,8 @@ import javax.persistence.EntityManagerFactory;
 //@PropertySource(value = "file:./application.properties")
 //@EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
 //@EnableAspectJAutoProxy(proxyTargetClass = true)
-public class JudicatureConfig extends SpringDataConfig {
-    @Value("${qp.spring.jpa.module}")
+public class JudicatureConfig extends QPSpringDataConfig {
+    @Value("${qp.spring.jpa.module.judicature}")
     private String qpJpaModuleName;
 
     @Bean(name = "judicatureEntityManagerFactory")
@@ -26,7 +27,7 @@ public class JudicatureConfig extends SpringDataConfig {
 
     @Bean(name = "judicatureTransactionManager")
     protected JpaTransactionManager getTransactionManager(
-            EntityManagerFactory entityManagerFactory) {
+            @Qualifier("judicatureEntityManagerFactory") EntityManagerFactory entityManagerFactory) {
         return super.transactionManager(entityManagerFactory);
     }
 

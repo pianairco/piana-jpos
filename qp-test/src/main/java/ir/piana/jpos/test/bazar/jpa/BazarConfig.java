@@ -1,6 +1,6 @@
 package ir.piana.jpos.test.bazar.jpa;
 
-import ir.piana.dev.jpos.qp.spring.data.SpringDataConfig;
+import ir.piana.dev.jpos.qp.spring.data.QPSpringDataConfig;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +17,7 @@ import javax.persistence.EntityManagerFactory;
 @PropertySource(value = "file:./application.properties")
 //@EnableTransactionManagement(mode = AdviceMode.ASPECTJ)
 //@EnableAspectJAutoProxy(proxyTargetClass = true)
-public class BazarConfig extends SpringDataConfig {
+public class BazarConfig extends QPSpringDataConfig {
     @Value("${qp.spring.jpa.module.bazar}")
     private String qpJpaModuleName;
 

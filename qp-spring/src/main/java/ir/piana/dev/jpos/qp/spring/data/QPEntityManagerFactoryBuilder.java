@@ -33,6 +33,8 @@ public final class QPEntityManagerFactoryBuilder {
             return "org.eclipse.persistence.platform.database.MySQLPlatform";
         else if(databasePlatformName.equalsIgnoreCase("oracle"))
             return "org.eclipse.persistence.platform.database.Oracle11Platform";
+        else if(databasePlatformName.equalsIgnoreCase("derby"))
+            return "org.eclipse.persistence.platform.database.DerbyPlatform";
         return null;
     }
 
@@ -41,6 +43,8 @@ public final class QPEntityManagerFactoryBuilder {
             return Database.MYSQL;
         else if(databasePlatformName.equalsIgnoreCase("oracle"))
             return Database.ORACLE;
+        else if(databasePlatformName.equalsIgnoreCase("derby"))
+            return Database.DERBY;
         return null;
     }
 
@@ -50,7 +54,7 @@ public final class QPEntityManagerFactoryBuilder {
                 new EclipseLinkJpaVendorAdapter();
         vendorAdapter.setDatabasePlatform(databasePlatformClassName);
         vendorAdapter.setDatabase(database);
-        vendorAdapter.setGenerateDdl(false);
+        vendorAdapter.setGenerateDdl(true);
         vendorAdapter.setShowSql(true);
         return vendorAdapter;
     }
@@ -61,7 +65,7 @@ public final class QPEntityManagerFactoryBuilder {
                 new HibernateJpaVendorAdapter();
         vendorAdapter.setDatabasePlatform(databasePlatformClassName);
         vendorAdapter.setDatabase(database);
-        vendorAdapter.setGenerateDdl(false);
+        vendorAdapter.setGenerateDdl(true);
         vendorAdapter.setShowSql(true);
         return vendorAdapter;
     }

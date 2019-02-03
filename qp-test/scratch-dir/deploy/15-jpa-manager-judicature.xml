@@ -1,24 +1,24 @@
-<qbean name="qp-jpa-manager-party"
+<qbean name="qp-jpa-manager-judicature"
        class="ir.piana.dev.jpos.qp.spring.module.QPJpaManagerModule"
        logger="Q2">
     <!--<property name="qp-space" value="tspace:default" />-->
     <!--<property name="qp-in" value="qp-http-request-multiplexor-module-in" />-->
 
-    <datasource name="datasource-bazar">
-        <database-platform>mysql</database-platform>
-        <jdbc-url>jdbc:mysql://localhost:3306/bazar_db</jdbc-url>
-        <driver-class-name>com.mysql.cj.jdbc.Driver</driver-class-name>
-        <user>root</user>
-        <password></password>
-        <sid></sid>
+    <datasource name="datasource-1">
+        <database-platform>oracle</database-platform>
+        <jdbc-url>jdbc:oracle:thin:@192.168.50.56:1521:dmloradb</jdbc-url>
+        <driver-class-name>oracle.jdbc.driver.OracleDriver</driver-class-name>
+        <user>judicature</user>
+        <password>123456</password>
+        <sid>dmloradb</sid>
         <pool-size>100</pool-size>
     </datasource>
 
-    <entity-manager-factory name="entity-manager-factory-bazar">
-        <database-platform>mysql</database-platform>
+    <entity-manager-factory name="entity-manager-factory-1">
+        <database-platform>oracle</database-platform>
         <jpa-provider>eclipselink</jpa-provider>
-        <persistence-unit-name>bazar-pu</persistence-unit-name>
-        <base-package>ir.piana.jpos.test.bazar.entity</base-package>
+        <persistence-unit-name>first-pu</persistence-unit-name>
+        <base-package>ir.piana.jpos.test.judicature.entity</base-package>
     </entity-manager-factory>
 
 

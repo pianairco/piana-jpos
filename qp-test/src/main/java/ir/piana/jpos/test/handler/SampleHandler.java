@@ -11,6 +11,7 @@ import ir.piana.dev.jpos.qp.ext.http.module.QPHttpResponseBuilder;
 import ir.piana.dev.jpos.qp.spring.module.QPSpringContextProviderModule;
 import ir.piana.jpos.test.bazar.dao.CountryDao;
 import ir.piana.jpos.test.bazar.entity.CountryEntity;
+import ir.piana.jpos.test.judicature.entity.UserTblEntity;
 import ir.piana.jpos.test.party.dao.UserDao;
 import ir.piana.jpos.test.party.entity.UserEntity;
 import org.glassfish.grizzly.http.util.HttpStatus;
@@ -30,17 +31,17 @@ public class SampleHandler implements QPHttpHandlerExt {
 //        UserRepository bean = module.getBean(UserRepository.class);
 //        UserTblEntity byId = bean.findById(10000);
 
-        CountryDao countryDao = module.getBean(CountryDao.class);
-        CountryEntity byId = (CountryEntity) countryDao.findById(
-                CountryEntity.class, 1);
-
-        UserDao userDao = module.getBean(UserDao.class);
-        UserEntity userEntity = (UserEntity) userDao.findById(
-                UserEntity.class, 9);
-
+//        CountryDao countryDao = module.getBean(CountryDao.class);
+//        CountryEntity byId = (CountryEntity) countryDao.findById(
+//                CountryEntity.class, 1);
+//
 //        UserDao userDao = module.getBean(UserDao.class);
-//        UserTblEntity byId = (UserTblEntity) userDao.findById(
-//                UserTblEntity.class, 10000);
+//        UserEntity userEntity = (UserEntity) userDao.findById(
+//                UserEntity.class, 9);
+
+        ir.piana.jpos.test.judicature.dao.UserDao userDao = module.getBean(ir.piana.jpos.test.judicature.dao.UserDao.class);
+        UserTblEntity byId = (UserTblEntity) userDao.findById(
+                UserTblEntity.class, 10000);
 
 
         return QPHttpResponseBuilder.status(HttpStatus.OK_200)

@@ -8,11 +8,17 @@ import ir.piana.dev.jpos.qp.core.http.QPHttpRoleManageable;
 import ir.piana.dev.jpos.qp.core.module.QPBaseModule;
 import ir.piana.dev.jpos.qp.core.module.QPDatabaseManagerModule;
 import ir.piana.dev.jpos.qp.ext.http.module.QPHttpRequest;
+import ir.piana.dev.jpos.qp.module.auth.data.dao.UserDao;
+import ir.piana.dev.jpos.qp.module.auth.data.entity.UserEntity;
+import ir.piana.dev.jpos.qp.spring.data.dao.QueryConditionStruct;
+import ir.piana.dev.jpos.qp.spring.module.QPSpringContextProviderModule;
 import ir.piana.dev.secure.util.Base64Converter;
 import org.jdom2.Element;
 
 import java.sql.ResultSet;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,18 +27,15 @@ import java.util.Map;
 public class HttpBasicAuthModule
         extends QPBaseModule
         implements QPHttpAuthorizable {
-    private String databaseManagerName;
-    private String databaseInstanceName;
+    private String springProviderModuleName;
     private QPQueryStruct queryStruct;
 
     @Override
     protected void configBeforeRegisterQPModule() throws Exception {
-        databaseManagerName = getPersist()
-                .getChildText("database-manager");
-        databaseInstanceName = getPersist()
-                .getChildText("database-instance");
-        queryStruct = QPQueryFactory.createQueryStruct(
-                getPersist().getChild("identity-query"));
+        springProviderModuleName = getPersist()
+                .getChildText("spring-provider-module");
+//        queryStruct = QPQueryFactory.createQueryStruct(
+//                getPersist().getChild("identity-query"));
     }
 
     @Override
@@ -75,15 +78,42 @@ public class HttpBasicAuthModule
         Map<String, Object> map = new LinkedHashMap<>();
         map.put("username", split[0]);
         map.put("password", split[1]);
-        QPDatabaseManagerModule dbmModule = QPBaseModule
-                .getModule(databaseManagerName);
-        ResultSet resultSet = dbmModule.executeQuery(
-                databaseInstanceName, queryStruct, map);
-//        if(resultSet.next())
-        return null;
+        QPSpringContextProviderModule springProviderModule = QPBaseModule
+                .getModule(springProviderModuleName);
+
+        UserDao userDao = springProviderModule.getBean(UserDao.class);
+        QueryConditionStruct queryConditionStruct = new QueryConditionStruct();
+        queryConditionStruct.setField("username");
+        queryConditionStruct.setFilters(Arrays.asList(map.get("username")));
+        queryConditionStruct.setFilterType(QueryConditionStruct.FilterType.IN_LIST);
+        List<UserEntity> users = userDao.selectAll(UserEntity.class, Arrays.asList(
+                new QueryConditionStruct("username",
+                        Arrays.asList(split[0]),
+                        QueryConditionStruct.FilterType.IN_LIST),
+                new QueryConditionStruct("password",
+                        Arrays.asList(split[1]),
+                        QueryConditionStruct.FilterType.IN_LIST)));
+        if(users.isEmpty())
+            return null;
+        String roles = users.get(0).getRoles();
+
+        return new BasicHttpRoleManageable(
+                Arrays.asList(roles.split(",")));
     }
 
-    public static String getPackage() {
-        return "";
+    protected static class BasicHttpRoleManageable
+            implements QPHttpRoleManageable {
+
+        private List<String> roles;
+
+        BasicHttpRoleManageable(List<String> roles) {
+
+            this.roles = roles;
+        }
+
+        @Override
+        public boolean hasAnyRoles(QPHttpRequest request) {
+            return false;
+        }
     }
 }

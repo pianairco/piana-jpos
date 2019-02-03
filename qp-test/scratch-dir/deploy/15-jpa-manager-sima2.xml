@@ -1,4 +1,4 @@
-<qbean name="qp-jpa-manager-2"
+<qbean name="qp-jpa-manager-sima2"
        class="ir.piana.dev.jpos.qp.spring.module.QPJpaManagerModule"
        logger="Q2">
     <!--<property name="qp-space" value="tspace:default" />-->
