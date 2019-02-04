@@ -3,6 +3,7 @@ package ir.piana.dev.jpos.qp.module.auth.basic;
 import ir.piana.dev.jpos.qp.core.data.database.QPQueryFactory;
 import ir.piana.dev.jpos.qp.core.data.database.QPQueryStruct;
 import ir.piana.dev.jpos.qp.core.error.QPException;
+import ir.piana.dev.jpos.qp.core.error.QPHttpResponseException;
 import ir.piana.dev.jpos.qp.core.http.QPHttpAuthorizable;
 import ir.piana.dev.jpos.qp.core.http.QPHttpRoleManageable;
 import ir.piana.dev.jpos.qp.core.module.QPBaseModule;
@@ -13,6 +14,7 @@ import ir.piana.dev.jpos.qp.module.auth.data.entity.UserEntity;
 import ir.piana.dev.jpos.qp.spring.data.dao.QueryConditionStruct;
 import ir.piana.dev.jpos.qp.spring.module.QPSpringContextProviderModule;
 import ir.piana.dev.secure.util.Base64Converter;
+import org.glassfish.grizzly.http.util.HttpStatus;
 import org.jdom2.Element;
 
 import java.sql.ResultSet;
@@ -69,8 +71,11 @@ public class HttpBasicAuthModule
     }
 
     @Override
-    public QPHttpRoleManageable authorize(QPHttpRequest request) throws QPException {
+    public QPHttpRoleManageable authorize(QPHttpRequest request)
+            throws QPHttpResponseException {
         String authorizationB64 = request.getHeader("Authorization");
+        if(authorizationB64 == null || authorizationB64.isEmpty())
+            throw new QPHttpResponseException(HttpStatus.UNAUTHORIZED_401);
         String authorization = new String(
                 Base64Converter.fromBase64String(authorizationB64
                         .substring(authorizationB64.indexOf(" "))));
@@ -107,12 +112,15 @@ public class HttpBasicAuthModule
         private List<String> roles;
 
         BasicHttpRoleManageable(List<String> roles) {
-
             this.roles = roles;
         }
 
         @Override
-        public boolean hasAnyRoles(QPHttpRequest request) {
+        public boolean hasAnyRoles(List<String> requiredRoles) {
+            for(String requiredRole : requiredRoles) {
+                if (roles.contains(requiredRole))
+                    return true;
+            }
             return false;
         }
     }

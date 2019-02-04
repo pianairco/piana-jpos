@@ -19,12 +19,19 @@ public class QPHttpRequest {
     HttpMediaType contentType;
     Map<String, String[]> queryParams;
     Object bodyObject;
+    String asteriskPath;
 
     QPHttpRequest(Request request)
+            throws QPException {
+        this(request, "");
+    }
+
+    QPHttpRequest(Request request, String asteriskPath)
             throws QPException {
         this.request = request;
         httpMethodType = HttpMethodType.fromCode(
                 request.getMethod().getMethodString());
+        this.asteriskPath = asteriskPath == null ? "" : asteriskPath;
         if(httpMethodType == HttpMethodType.POST ||
                 httpMethodType == HttpMethodType.PUT) {
             contentType = HttpMediaType
@@ -97,5 +104,9 @@ public class QPHttpRequest {
 
     public Set<String> getNameOfParams() {
         return queryParams.keySet();
+    }
+
+    public String getAsteriskPath() {
+        return asteriskPath;
     }
 }

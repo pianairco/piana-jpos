@@ -11,4 +11,18 @@ public class QPHttpResponse<T> {
     T entity;
     HttpMediaType mediaType;
     String charset;
+
+    QPHttpResponse() {
+    }
+
+    QPHttpResponse(
+            HttpStatus httpStatus,
+            T entity,
+            HttpMediaType mediaType,
+            String charset) {
+        this.httpStatus = httpStatus;
+        this.entity = entity;
+        this.mediaType = mediaType;
+        this.charset = charset;
+    }
 }

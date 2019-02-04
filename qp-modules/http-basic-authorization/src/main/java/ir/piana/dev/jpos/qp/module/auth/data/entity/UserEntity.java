@@ -2,7 +2,6 @@ package ir.piana.dev.jpos.qp.module.auth.data.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
 
 /**
  * @author Mohammad Rahmati, 2/3/2019

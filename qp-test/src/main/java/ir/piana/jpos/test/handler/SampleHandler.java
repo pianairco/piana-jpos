@@ -23,6 +23,11 @@ import java.util.Map;
  */
 public class SampleHandler implements QPHttpHandlerExt {
     @Override
+    public void config(Map<String, String> configMap) {
+
+    }
+
+    @Override
     public QPHttpResponse get(QPHttpRequest request)
             throws QPHttpResponseException {
 

@@ -10,7 +10,18 @@
 
     <qp-http-request>
         <qp-url>sample</qp-url>
-        <qp-service>ir.piana.jpos.test.handler.SampleHandler</qp-service>
+        <qp-handler class="ir.piana.jpos.test.handler.SampleHandler"></qp-handler>
+        <qp-role>
+            <default>admin</default>
+            <get>user</get>
+        </qp-role>
+    </qp-http-request>
+
+    <qp-http-request>
+        <qp-url>static/**</qp-url>
+        <qp-handler class="ir.piana.dev.jpos.qp.ext.http.module.QPHttpStaticHandler">
+            <root-path>./static</root-path>
+        </qp-handler>
         <qp-role>
             <default>admin</default>
             <get>user</get>

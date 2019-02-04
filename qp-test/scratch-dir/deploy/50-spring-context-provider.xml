@@ -17,4 +17,7 @@
     <config-bean>ir.piana.jpos.test.sima2.jpa.Sima2Config</config-bean>
     <config-package>ir.piana.jpos.test.sima2.dao</config-package>
 
+    <config-bean>ir.piana.dev.jpos.qp.module.auth.data.QpConfig</config-bean>
+    <config-package>ir.piana.dev.jpos.qp.module.auth.data.dao</config-package>
+
 </qbean>

@@ -15,6 +15,7 @@ import ir.piana.dev.jpos.qp.core.security.role.QPRoleManager;
 import org.glassfish.grizzly.http.Method;
 import org.glassfish.grizzly.http.server.Request;
 import org.glassfish.grizzly.http.server.Response;
+import org.glassfish.grizzly.http.util.HttpStatus;
 import org.jdom2.Element;
 import org.jpos.q2.QBean;
 import org.jpos.space.SpaceListener;
@@ -24,6 +25,7 @@ import org.jpos.util.Logger;
 
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -36,6 +38,9 @@ public class QPHttpRequestMultiplexorExtModule
         implements SpaceListener<String, Context> {
     protected Map<String, QPHttpHandlerInfo> httpHandlerMap =
             new LinkedHashMap<>();
+    protected Map<String, QPHttpHandlerInfo> httpAsteriskHandlerMap =
+            new LinkedHashMap<>();
+
     protected ExecutorService listener;
     protected ExecutorService worker;
     protected Gson gson = new Gson();
@@ -57,9 +62,19 @@ public class QPHttpRequestMultiplexorExtModule
                 String url = httpRequest.getChildText("qp-url");
                 if(!url.startsWith("/"))
                     url = "/".concat(url);
-                String service = httpRequest.getChildText("qp-service");
+                Element handlerElement = httpRequest.getChild("qp-handler");
+                String handlerClass = handlerElement.getAttributeValue("class");
+                List<Element> handlerConfigElements = handlerElement.getChildren();
+                Map<String, String> handlerConfigMap = new LinkedHashMap<>();
+                for(Element el : handlerConfigElements) {
+                    String name = el.getName();
+                    String value = el.getText();
+                    handlerConfigMap.put(name, value);
+                }
+
                 QPHttpHandlerExt handler = (QPHttpHandlerExt)getLoader()
-                        .loadClass(service).newInstance();
+                        .loadClass(handlerClass).newInstance();
+                handler.config(handlerConfigMap);
                 Element qpRoleElement = httpRequest.getChild("qp-role");
                 String defaultRoles = qpRoleElement.getChildText("default");
                 String getRoles = qpRoleElement.getChildText("get");
@@ -79,7 +94,15 @@ public class QPHttpRequestMultiplexorExtModule
                 httpRole.setRole(HttpMethodType.OPTIONS, optionsRoles);
                 httpRole.setRole(HttpMethodType.TRACE, traceRoles);
 
-                httpHandlerMap.put(url, new QPHttpHandlerInfo(url, handler, httpRole));
+                if(url.contains("**")) {
+                    httpAsteriskHandlerMap.put(url.substring(0, url.indexOf("/**")),
+                            new QPHttpHandlerInfo(url.substring(
+                                    0, url.indexOf("/**")),
+                                    handler, httpRole));
+                } else {
+                    httpHandlerMap.put(url,
+                            new QPHttpHandlerInfo(url, handler, httpRole));
+                }
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             } catch (IllegalAccessException e) {
@@ -148,11 +171,33 @@ public class QPHttpRequestMultiplexorExtModule
             response = context.get("response");
             QPHttpHandlerInfo handlerInfo = httpHandlerMap
                     .get(request.getRequestURI());
-            if (handlerInfo == null || handlerInfo.getHttpHandlerExt() == null)
+            if (handlerInfo == null) {
+                String selectedKey = "";
+                for (String key : httpAsteriskHandlerMap.keySet()) {
+                    if(request.getRequestURI().startsWith(key)) {
+                        if(selectedKey.length() < key.length())
+                            selectedKey = key;
+                    }
+                }
+                if(selectedKey.isEmpty())
+                   NOT_FOUND.handle(request, response);
+                else
+                    handlerInfo = httpAsteriskHandlerMap.get(selectedKey);
+                if(handlerInfo == null || handlerInfo.getHttpHandlerExt() == null)
+                    NOT_FOUND.handle(request, response);
+                else {
+                    invokeHttpOperator(
+                            handlerInfo,
+                            new QPHttpRequest(request, request.getRequestURI()
+                                    .substring(selectedKey.length())),
+                            request, response);
+                }
+            } else if (handlerInfo.getHttpHandlerExt() == null) {
                 NOT_FOUND.handle(request, response);
-            else {
+            } else {
                 invokeHttpOperator(
                         handlerInfo,
+                        new QPHttpRequest(request),
                         request, response);
             }
         } catch (QPHttpResponseException e) {
@@ -180,15 +225,25 @@ public class QPHttpRequestMultiplexorExtModule
 
     protected void invokeHttpOperator(
             QPHttpHandlerInfo handlerInfo,
+            QPHttpRequest httpRequest,
             Request request, Response response)
             throws Exception {
 
-        QPHttpRequest httpRequest = new QPHttpRequest(request);
+        if(!handlerInfo.getRoles().getDefaultRole().isEmpty()
+                && handlerInfo.getRoles().getRole(
+                        HttpMethodType.fromCode(
+                                request.getMethod().getMethodString())).isEmpty()) {
+        } else {
+            QPHttpAuthorizable authorizable = QPBaseModule
+                    .getModule(authorizationProviderModuleName);
+            if(!authorizable.authorize(httpRequest)
+                    .hasAnyRoles(handlerInfo.getRoles()
+                            .getRole(httpRequest.httpMethodType))) {
+                throw new QPHttpResponseException(QPDefaultRequestHandlerType.FORBIDDEN);
+            }
+        }
 
-        QPHttpAuthorizable authorizable = QPBaseModule
-                .getModule(authorizationProviderModuleName);
-        authorizable.authorize(httpRequest)
-                .hasAnyRoles(httpRequest);
+
 //        QPHttpRoleManageable roleManageable = authorizable
 //                .authorize(httpRequest);
 
@@ -197,35 +252,31 @@ public class QPHttpRequestMultiplexorExtModule
 //        QPRoleManager roleManager = QPBaseModule
 //                .getModule(roleManagementModuleName);
 
-        QPHttpHandlerExt httpHandlerExt = handlerInfo.getHttpHandlerExt();
-        boolean b = true;
-
 //        boolean b = roleManager.hasAnyRole(
 //                identity, handlerInfo.getRoles()
 //                        .getRole(HttpMethodType.fromCode(
 //                                request.getMethod().getMethodString())));
-        if(!b)
-            QPDefaultRequestHandlerType.UNAUTHORIZED
-                    .handle(request, response);
+
+        QPHttpHandlerExt httpHandlerExt = handlerInfo.getHttpHandlerExt();
         if(request.getMethod().equals(Method.POST)) {
             makeResponse(response,
-                    httpHandlerExt.post(new QPHttpRequest(request)));
+                    httpHandlerExt.post(httpRequest));
 
         } else if(request.getMethod().equals(Method.GET)) {
             makeResponse(response,
-                        httpHandlerExt.get(new QPHttpRequest(request)));
+                        httpHandlerExt.get(httpRequest));
         } else if(request.getMethod().equals(Method.PUT)) {
             makeResponse(response,
-                    httpHandlerExt.put(new QPHttpRequest(request)));
+                    httpHandlerExt.put(httpRequest));
         } else if(request.getMethod().equals(Method.DELETE)) {
             makeResponse(response,
-                    httpHandlerExt.delete(new QPHttpRequest(request)));
+                    httpHandlerExt.delete(httpRequest));
         } else if(request.getMethod().equals(Method.HEAD)) {
             makeResponse(response,
-                    httpHandlerExt.head(new QPHttpRequest(request)));
+                    httpHandlerExt.head(httpRequest));
         } else if(request.getMethod().equals(Method.OPTIONS)) {
             makeResponse(response,
-                    httpHandlerExt.options(new QPHttpRequest(request)));
+                    httpHandlerExt.options(httpRequest));
         } else if(request.getMethod().equals(Method.TRACE)) {
             makeResponse(response,
                     httpHandlerExt.trace(new QPHttpRequest(request)));

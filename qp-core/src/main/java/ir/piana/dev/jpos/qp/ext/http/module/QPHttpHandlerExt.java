@@ -3,7 +3,11 @@ package ir.piana.dev.jpos.qp.ext.http.module;
 import ir.piana.dev.jpos.qp.core.error.QPHttpResponseException;
 import org.glassfish.grizzly.http.util.HttpStatus;
 
+import java.util.Map;
+
 public interface QPHttpHandlerExt {
+    void config(Map<String, String> configMap);
+
     default QPHttpResponse get(QPHttpRequest request)
             throws QPHttpResponseException {
         QPHttpResponseBuilder.status(HttpStatus.NOT_FOUND_404);
