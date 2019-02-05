@@ -23,8 +23,8 @@
             <root-path>./static</root-path>
         </qp-handler>
         <qp-role>
-            <default>admin</default>
-            <get>user</get>
+            <default></default>
+            <get></get>
         </qp-role>
     </qp-http-request>
 </qbean>

@@ -1,6 +1,6 @@
 package ir.piana.dev.jpos.qp.ext.http.module;
 
-import java.util.List;
+import ir.piana.dev.jpos.qp.core.http.enums.HttpMethodType;
 
 /**
  * @author Mohammad Rahmati, 1/19/2019
@@ -40,6 +40,14 @@ class QPHttpHandlerInfo {
 
     public QPHttpRole getRoles() {
         return roles;
+    }
+
+    public boolean mustAuthorized(HttpMethodType methodType) {
+        if(roles.getRole(methodType) == null ||
+                roles.getRole(methodType).isEmpty()) {
+            return false;
+        }
+        return true;
     }
 
     public void setRoles(QPHttpRole roles) {

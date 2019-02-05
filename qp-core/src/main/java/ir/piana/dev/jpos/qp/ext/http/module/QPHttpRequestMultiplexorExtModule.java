@@ -229,11 +229,7 @@ public class QPHttpRequestMultiplexorExtModule
             Request request, Response response)
             throws Exception {
 
-        if(!handlerInfo.getRoles().getDefaultRole().isEmpty()
-                && handlerInfo.getRoles().getRole(
-                        HttpMethodType.fromCode(
-                                request.getMethod().getMethodString())).isEmpty()) {
-        } else {
+        if(handlerInfo.mustAuthorized(httpRequest.httpMethodType)) {
             QPHttpAuthorizable authorizable = QPBaseModule
                     .getModule(authorizationProviderModuleName);
             if(!authorizable.authorize(httpRequest)
@@ -242,7 +238,6 @@ public class QPHttpRequestMultiplexorExtModule
                 throw new QPHttpResponseException(QPDefaultRequestHandlerType.FORBIDDEN);
             }
         }
-
 
 //        QPHttpRoleManageable roleManageable = authorizable
 //                .authorize(httpRequest);
@@ -292,6 +287,8 @@ public class QPHttpRequestMultiplexorExtModule
         if(!(qpHttpResponse.entity instanceof String)) {
             if (qpHttpResponse.mediaType == HttpMediaType.APPLICATION_JSON) {
                 entityString = gson.toJson(qpHttpResponse.entity);
+            } else {
+                entityString = new String((byte[])qpHttpResponse.entity);
             }
         } else {
             entityString = (String)qpHttpResponse.entity;
